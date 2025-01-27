@@ -1,0 +1,23 @@
+name: Update Data
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Update data file
+      run: |
+        echo '{ "ppm": 0 }' > data.json
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+        git add data.json
+        git commit -m "Update data"
+        git push
