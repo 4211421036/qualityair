@@ -404,14 +404,6 @@
                     <div role="text" role="text" class="stat-label">Raw Value</div>
                 </div>
                 <div class="stat-card">
-                    <div id="upload" class="upload-progress-container" role="progressbar" 
-                         aria-label="Status upload data ke GitHub" 
-                         aria-valuenow="0" 
-                         aria-valuemin="0" 
-                         aria-valuemax="100">
-                        <div class="upload-progress-bar"></div>
-                        <div class="upload-status" aria-live="polite">Dalam antrian...</div>
-                    </div>
                     <div role="treeitem" tabindex="2" role="text" class="stat-value" id="timestamp" aria-labelled="timestamp" aria-hidden="true">--</div>
                     <div role="text" role="text" class="stat-label" aria-label="Last Update Time">Last Updated</div>
                 </div>
@@ -494,16 +486,50 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     <script>
-        // Fungsi untuk membuat timestamp unik
+        const progressBarContainer = document.getElementById('upload');
         const progressBar = document.querySelector('.upload-progress-bar');
         const uploadStatus = document.querySelector('.upload-status');
+        
+        // Fungsi untuk membuat timestamp unik
         function getTimestampParameter() {
             return `?t=${new Date().getTime()}`;
         }
         
+        // Fungsi untuk membuat dan memulai progress bar baru
+        function createProgressBar() {
+            const container = document.createElement('div');
+            container.classList.add('upload-progress-container');
+            container.setAttribute('role', 'progressbar');
+            container.setAttribute('aria-label', 'Status upload data ke GitHub');
+            container.setAttribute('aria-valuenow', '0');
+            container.setAttribute('aria-valuemin', '0');
+            container.setAttribute('aria-valuemax', '100');
+        
+            const bar = document.createElement('div');
+            bar.classList.add('upload-progress-bar');
+            container.appendChild(bar);
+        
+            const statusText = document.createElement('div');
+            statusText.classList.add('upload-status');
+            statusText.setAttribute('aria-live', 'polite');
+            statusText.textContent = 'Dalam antrian...';
+            container.appendChild(statusText);
+        
+            progressBarContainer.appendChild(container);
+            return bar;
+        }
+        
+        // Fungsi untuk menghapus progress bar setelah selesai
+        function removeProgressBar() {
+            setTimeout(() => {
+                progressBarContainer.removeChild(progressBarContainer.querySelector('.upload-progress-container'));
+            }, 500); // Menunggu 500ms agar animasi selesai sebelum menghapus
+        }
+
         // Fungsi utama untuk fetching data
         async function fetchData() {
             let progress = 0;
+            const progressBar = createProgressBar();
             try {
                 // Gunakan URL GitHub Pages langsung, bukan raw.githubusercontent.com
                 const url = `https://4211421036.github.io/qualityair/data.json${getTimestampParameter()}`;
@@ -522,7 +548,7 @@
                     throw new Error(`HTTP error! status: ${response.status}`);
                     const data = await response.json();
                     const lastUpdate = new Date(data.commit.committer.date).toLocaleString();
-                }// Simulasikan progress secara bertahap
+                }
                 const interval = setInterval(() => {
                     progress += 10;  // Meningkatkan progres 10% setiap interval
                     progressBar.style.width = `${progress}%`;
@@ -545,9 +571,10 @@
                     if (progress >= 100) {
                         clearInterval(interval);
                         uploadStatus.textContent = 'Selesai diunggah';
+                        removeProgressBar(); // Menghapus progress bar setelah selesai
                         setTimeout(() => {
-                            document.getElementById('upload').remove();  // Menghapus elemen progress bar setelah 100%
-                        }, 500);  // Menunggu 500ms agar animasi selesai sebelum menghapus
+                            fetchData(); // Mengulang proses ketika progress mencapai 100%
+                        }, 1000); // Memberikan waktu 1 detik sebelum memulai proses baru
                     }
                 }, 1000);  // Interval 1 detik untuk simulasi progress
                 const jsonData = await response.json();
