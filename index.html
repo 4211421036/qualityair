@@ -329,13 +329,54 @@
         }
 
         .upload-progress-container {
-            width: 130px; /* Ensure the container takes the full width of the card */
+            width: 100px; /* Ensure the container takes the full width of the card */
             height: 1px; /* Adjust the height of the progress bar */
             background-color: var(--border-color);
             border-radius: 2px;
             overflow: hidden;
             position: fixed; /* Ensure it sits inside the card */
             margin: -15px 10px;
+        }
+
+        @media (min-width: 375px) and (max-width: 425px) {
+            .upload-progress-container {
+                width: 113px;
+                height: 1px;
+                background-color: var(--border-color);
+                border-radius: 2px;
+                overflow: hidden;
+                position: fixed;
+                margin: -15px -5px;
+                transform: translateX(0%);
+            }
+        }
+        
+        /* When screen width is between 320px and 374px */
+        @media (min-width: 320px) and (max-width: 374px) {
+            .upload-progress-container {
+                width: 83px;
+                height: 1px;
+                background-color: var(--border-color);
+                border-radius: 2px;
+                overflow: hidden;
+                position: fixed;
+                margin: -15px -5px;
+                transform: translateX(0%);
+            }
+        }
+        
+        /* When screen width is 425px */
+        @media (min-width: 425px) {
+            .upload-progress-container {
+                width: 133px;
+                height: 1px;
+                background-color: var(--border-color);
+                border-radius: 2px;
+                overflow: hidden;
+                position: fixed;
+                margin: -15px -5px;
+                transform: translateX(0%);
+            }
         }
         
         .upload-progress-bar {
