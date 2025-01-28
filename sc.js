@@ -49,7 +49,7 @@ async function generateHtml() {
     return generateHashedFileName(originalPath); // Nama hash file, tidak perlu membuat salinan
   });
 
-  const cssFiles = ['style.css', 'all.min.css'];
+  const cssFiles = ['style.css'];
   const hashedCssFiles = cssFiles.map((file) => {
     const filePath = path.join(process.cwd(), file); // Asumsi file berada di direktori kerja
     return generateHashedFileName(filePath);
@@ -57,15 +57,15 @@ async function generateHtml() {
 
   // CSP dengan strict-dynamic
   const cspContent = [
-      `style-src 'self' 'nonce-${nonce}' 'unsafe-inline' https://4211421036.github.io http://4211421036.github.io`,
+      `style-src 'self' 'nonce-${nonce}' 'unsafe-inline' https://4211421036.github.io http://4211421036.github.io https://cdnjs.cloudflare.com`,
       "object-src 'none'",
       "base-uri 'self'",
       "img-src 'self' data: https://4211421036.github.io http://4211421036.github.io",
       "default-src 'self' https://4211421036.github.io http://4211421036.github.io",
       `script-src 'self' 'unsafe-inline' 'nonce-${nonce}' 'strict-dynamic' ${hashedJsFiles
         .map((file) => `'sha384-${generateIntegrityHash(path.join(process.cwd(), file))}'`)
-        .join(' ')} https://4211421036.github.io http://4211421036.github.io;`,
-      "font-src 'self' https://4211421036.github.io http://4211421036.github.io",
+        .join(' ')} https://4211421036.github.io http://4211421036.github.io https://cdnjs.cloudflare.com`,
+      "font-src 'self' https://4211421036.github.io http://4211421036.github.io https://cdnjs.cloudflare.com;",
       "media-src 'self' https://4211421036.github.io http://4211421036.github.io",
       "connect-src 'self' https://4211421036.github.io http://4211421036.github.io",
       "form-action 'self'",
@@ -99,10 +99,12 @@ async function generateHtml() {
       <meta name="twitter:description" content="Monitor the air quality index and CO levels in real-time.">
       <meta name="twitter:image" content="https://4211421036.github.io/image.jpg">
       <link rel="apple-touch-icon" href="apple-touch-icon.png">
-      <link rel="manifest" href="/manifest.webmanifest">
+      <link rel="manifest" href="/qualityair/manifest.webmanifest">
       <link rel="canonical" href="https://4211421036.github.io/qualityair/">
       <link rel="manifest" href="manifest.webmanifest" crossorigin="use-credentials">
+      <link nonce="${nonce}" integrity="sha384-${integrityHash}" crossorigin="anonymous" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
       <meta http-equiv="Content-Security-Policy" content="${cspContent}">
+      <script nonce="${nonce}" integrity="sha384-${integrityHash}" crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js" defer></script>
       ${hashedCssFiles
           .map(
             (file) =>
