@@ -343,8 +343,8 @@
         });
     </script>
     <div tabindex="0" class="app-container">
-        <div tabindex="1" class="header">
-            <div tabindex="2">
+        <div role="tree" tabindex="1" class="header">
+            <div role="treeitem" tabindex="2">
                 <div role="text" class="greeting" id="greeting" aria-labelled="greeting" aria-hidden="true">Good Morning</div>
                 <div role="text" class="date" id="current-date"></div>
             </div>
@@ -353,24 +353,24 @@
             </button>
         </div>
 
-        <div class="main-card" tabindex="0">
-            <div class="aqi-display" tabindex="1">
-                <div class="aqi-circle" tabindex="2">
-                    <div role="text" class="aqi-number" id="ppm-value" aria-labelled="ppm-value" aria-hidden="true">--</div>
-                    <div role="text" class="aqi-label">CO PPM</div>
+        <div role="tree" class="main-card" tabindex="0">
+            <div role="treeitem" class="aqi-display" tabindex="1">
+                <div role="group" class="aqi-circle" tabindex="2">
+                    <div role="treeitem" class="aqi-number" id="ppm-value" aria-labelled="ppm-value" aria-hidden="true">--</div>
+                    <div role="treeitem" class="aqi-label">CO PPM</div>
                 </div>
                 <div tabindex="2" class="aqi-status" id="air-quality-status" aria-labelled="air-status" aria-hidden="true" title="Status CO">Calculating...</div>
                 <p id="air-status" role="tooltip">Status CO</p>
             </div>
 
-            <div class="stats-grid" tabindex="0">
-                <div class="stat-card" tabindex="1">
-                    <div tabindex="2" role="text" class="stat-value" id="raw-value" aria-labelled="raw-value" aria-hidden="true">--</div>
-                    <div tabindex="2" role="text" class="stat-label">Raw Value</div>
+            <div role="treeitem" class="stats-grid" tabindex="0">
+                <div role="gruop" class="stat-card" tabindex="1">
+                    <div role="treeitem" tabindex="2" role="text" class="stat-value" id="raw-value" aria-labelled="raw-value" aria-hidden="true">--</div>
+                    <div role="treeitem" tabindex="2" role="text" class="stat-label">Raw Value</div>
                 </div>
-                <div tabindex="1" class="stat-card">
-                    <div tabindex="2" role="text" class="stat-value" id="timestamp" aria-labelled="timestamp" aria-hidden="true">--</div>
-                    <div tabindex="2" role="text" class="stat-label">Last Updated</div>
+                <div role="gruop" tabindex="1" class="stat-card">
+                    <div role="treeitem" tabindex="2" role="text" class="stat-value" id="timestamp" aria-labelled="timestamp" aria-hidden="true">--</div>
+                    <div role="treeitem" tabindex="2" role="text" class="stat-label">Last Updated</div>
                 </div>
             </div>
         </div>
@@ -397,9 +397,9 @@
 
     <!-- History Modal -->
     <div tabindex="1" role="dialog" class="modal" id="history-modal" aria-labelled="history-modal" aria-describedby="history-modal" aria-hidden="true">
-        <div tabindex="2" class="modal-header">
-            <div tabindex="3" class="swipe-indicator"></div>
-            <div tabindex="3" class="modal-title" role="text">CO Level History</div>
+        <div role="gruop" tabindex="2" class="modal-header">
+            <div role="treeitem" tabindex="3" class="swipe-indicator"></div>
+            <div role="treeitem" tabindex="3" class="modal-title" role="text">CO Level History</div>
         </div>
         <div tabindex="2" class="modal-content">
             <div tabindex="2" class="chart-container">
@@ -410,18 +410,18 @@
 
     <!-- Forecast Modal -->
     <div tabindex="2" role="dialog" class="modal" id="forecast-modal" aria-labelled="forecast-modal" aria-describedby="forecast-modal" aria-hidden="true">
-        <div tabindex="3" class="modal-header">
-            <div tabindex="4" class="swipe-indicator"></div>
-            <div tabindex="4" class="modal-title" role="text">Air Quality Forecast</div>
+        <div role="gruop" tabindex="3" class="modal-header">
+            <div role="treeitem" tabindex="4" class="swipe-indicator"></div>
+            <div role="treeitem" tabindex="4" class="modal-title" role="text">Air Quality Forecast</div>
         </div>
         <div tabindex="3" class="modal-content">
             <div tabindex="4" class="chart-container">
                 <canvas id="forecastChart" aria-labelled="forecastChart" aria-hidden="true"></canvas>
             </div>
             <div tabindex="5" class="recommendations">
-                <div tabindex="6" class="recommendation-item">
-                    <div tabindex="7" class="recommendation-title" role="text">Today's Recommendation</div>
-                    <div tabindex="7" class="recommendation-text" id="daily-recommendation" role="text" aria-describedby="daily-recommendation" aria-hidden="true">
+                <div role="gruop" tabindex="6" class="recommendation-item">
+                    <div role="treeitem" tabindex="7" class="recommendation-title" role="text">Today's Recommendation</div>
+                    <div role="treeitem" tabindex="7" class="recommendation-text" id="daily-recommendation" role="text" aria-describedby="daily-recommendation" aria-hidden="true">
                         Based on current CO levels...
                     </div>
                 </div>
@@ -438,12 +438,12 @@
         <div tabindex="4" class="recommendation-item">
             <div tabindex="5" class="recommendation-title" role="text">CO Levels Guide</div>
             <div tabindex="6" class="recommendation-text">
-                <ul tabindex="7" class="no-list-style">
-                    <li tabindex="8" role="text">🟢 0-50 PPM: Safe</li>
-                    <li tabindex="8" role="text">🟡 51-100 PPM: Moderate</li>
-                    <li tabindex="8" role="text">🟠 101-150 PPM: Unhealthy for Sensitive Groups</li>
-                    <li tabindex="8" role="text">🔴 151-200 PPM: Unhealthy</li>
-                    <li tabindex="8" role="text">🟣 >200 PPM: Very Dangerous</li>
+                <ul role="group" tabindex="7" class="no-list-style">
+                    <li role="treeitem" tabindex="8" aria-label="safe">🟢 0-50 PPM: Safe</li>
+                    <li role="treeitem" tabindex="8" aria-label="Moderate">🟡 51-100 PPM: Moderate</li>
+                    <li role="treeitem" tabindex="8" aria-label="Unhealthy">🟠 101-150 PPM: Unhealthy for Sensitive Groups</li>
+                    <li role="treeitem" tabindex="8" aria-label="Very Unhealthy">🔴 151-200 PPM: Unhealthy</li>
+                    <li role="treeitem" tabindex="8" aria-label="Very Dangerous">🟣 >200 PPM: Very Dangerous</li>
                 </ul>
             </div>
         </div>
