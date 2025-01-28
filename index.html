@@ -617,22 +617,38 @@
                 return "the air quality is hazardous. Remain indoors and use air purifiers if available.";
             }
         }
+        // Fungsi untuk menampilkan teks dengan animasi typing effect
+        function typeText(element, text, speed = 50) {
+            element.textContent = ""; // Kosongkan teks sebelumnya
+            let index = 0;
+        
+            function type() {
+                if (index < text.length) {
+                    element.textContent += text.charAt(index);
+                    index++;
+                    setTimeout(type, speed); // Ulangi hingga semua karakter selesai
+                }
+            }
+        
+            type();
+        }
         
         // Fungsi untuk memperbarui elemen rekomendasi berdasarkan forecast prediction
         function updateRecommendation(forecastValues) {
+            const recommendationElement = document.getElementById("daily-recommendation");
+        
             if (!forecastValues || forecastValues.length === 0) {
-                document.getElementById("daily-recommendation").textContent = 
-                    "Unable to fetch forecast data. Please try again later.";
+                typeText(recommendationElement, "Unable to fetch forecast data. Please try again later.");
                 return;
             }
         
             const averageForecast = forecastValues.reduce((sum, val) => sum + val, 0) / forecastValues.length;
             const recommendation = getRecommendation(averageForecast);
         
-            document.getElementById("daily-recommendation").textContent = 
-                `Based on current CO levels (${averageForecast.toFixed(1)} ppm), ${recommendation}`;
+            const recommendationText = `Based on current CO levels (${averageForecast.toFixed(1)} ppm), ${recommendation}`;
+            typeText(recommendationElement, recommendationText, 50); // Tambahkan animasi typing dengan kecepatan 50ms
         }
-
+        
         // Data handling
         const historicalData = {
             times: [],
