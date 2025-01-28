@@ -1,0 +1,28 @@
+name: Deploy and Training Backend Deployment
+
+on:
+  push:
+    branches:
+      - main  # Or your desired branch name
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out the repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'  # Specify the Python version you need
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt  # Install the dependencies listed in the requirements.txt
+
+    - name: Run the Flask App
+      run: |
+        python app.py  # Adjust the filename if your main Python script is named differently
