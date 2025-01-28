@@ -72,6 +72,7 @@ async function generateHtml() {
       "worker-src 'self' blob: https://4211421036.github.io http://4211421036.github.io"
   ].join('; ');
 
+  const integrityHash = generateIntegrityHash(filePath);
   let htmlContent = `<!DOCTYPE html>
   <html lang="en">
     <head>
