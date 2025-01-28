@@ -1,8 +1,8 @@
 {
   "id": "co",
-  "name": "Selamat Ulang Tahun",
-  "short_name": "Ulang Tahun",
-  "description": "Website offline untuk ucapan ulang tahun.",
+  "name": "CO Monitoring Realtime",
+  "short_name": "CO Monitoring Realtime",
+  "description": "CO Monitoring Realtime berbasis IoT menggunakan ESP32",
   "icons": [
     {
       "src": "192x192.png",
