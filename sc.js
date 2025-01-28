@@ -72,7 +72,6 @@ async function generateHtml() {
       "worker-src 'self' blob: https://4211421036.github.io http://4211421036.github.io"
   ].join('; ');
 
-  const integrityHash = generateIntegrityHash(filePath);
   let htmlContent = `<!DOCTYPE html>
   <html lang="en">
     <head>
@@ -102,9 +101,9 @@ async function generateHtml() {
       <link rel="manifest" href="/qualityair/manifest.webmanifest">
       <link rel="canonical" href="https://4211421036.github.io/qualityair/">
       <link rel="manifest" href="manifest.webmanifest" crossorigin="use-credentials">
-      <link nonce="${nonce}" integrity="sha384-${integrityHash}" crossorigin="anonymous" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+      <link nonce="${nonce}" integrity="sha384-${generateIntegrityHash}" crossorigin="anonymous" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
       <meta http-equiv="Content-Security-Policy" content="${cspContent}">
-      <script nonce="${nonce}" integrity="sha384-${integrityHash}" crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js" defer></script>
+      <script nonce="${nonce}" integrity="sha384-${generateIntegrityHash}" crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js" defer></script>
       ${hashedCssFiles
           .map(
             (file) =>
