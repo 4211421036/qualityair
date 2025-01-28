@@ -815,17 +815,6 @@
                 forecastLabels.push(futureTimeStr);
             }
 
-            // Gunakan 6 data terakhir untuk historical
-            const recentTimes = historicalData.times.slice(-6);
-            const recentValues = historicalData.values.slice(-6);
-
-            // Generate 6 forecast points
-            for (let i = 1; i <= 6; i++) {
-                const futureTime = new Date(currentTime.getTime() + i * 5 * 60000); // 5 menit interval
-                forecastTimes.push(futureTime);
-                forecastLabels.push(futureTime.toLocaleTimeString());
-            }
-
             // Generate predictions
             historicalData.forecastValues = predictNextValues(historicalData.values);
             
