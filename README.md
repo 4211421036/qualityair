@@ -121,4 +121,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 10. Contact
 
 For any questions or suggestions, feel free to open an issue on the [GitHub Repository](https://github.com/4211421036/qualityair).
-[GitHub Repository](https://wa.me/+6281932279615)
+
+[WhatsApp GALIH RIDHO UTOMO](https://wa.me/+6281932279615)
