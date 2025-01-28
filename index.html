@@ -619,36 +619,40 @@
         }
         
         // Fungsi untuk menampilkan teks dengan animasi typing effect
-        function typeText(element, text, speed = 50, callback = null) {
-            let index = 0;
+        function typeText(element, text, speed = 50) {
+            return new Promise((resolve) => {
+                let index = 0;
+                element.textContent = ""; // Kosongkan teks sebelumnya
         
-            function type() {
-                if (index < text.length) {
-                    element.textContent += text.charAt(index);
-                    index++;
-                    setTimeout(type, speed); // Lanjutkan hingga semua karakter selesai
-                } else if (callback) {
-                    callback(); // Jalankan callback setelah selesai
+                function type() {
+                    if (index < text.length) {
+                        element.textContent += text.charAt(index);
+                        index++;
+                        setTimeout(type, speed);
+                    } else {
+                        resolve(); // Resolusi setelah selesai mengetik
+                    }
                 }
-            }
         
-            type(); // Mulai animasi
+                type();
+            });
         }
         
         // Fungsi untuk memperbarui elemen rekomendasi berdasarkan forecast prediction
-        function updateRecommendation(forecastValues) {
+        async function updateRecommendation(forecastValues) {
             const recommendationElement = document.getElementById("daily-recommendation");
         
-            // Jika animasi sedang berjalan, jangan lakukan apa-apa hingga selesai
+            // Cegah pengulangan atau reset animasi jika sudah selesai
             if (recommendationElement.getAttribute("data-typing") === "true") {
                 return;
             }
         
+            // Tandai animasi sedang berlangsung
+            recommendationElement.setAttribute("data-typing", "true");
+        
             if (!forecastValues || forecastValues.length === 0) {
-                recommendationElement.setAttribute("data-typing", "true"); // Tandai animasi berjalan
-                typeText(recommendationElement, "Unable to fetch forecast data. Please try again later.", 50, () => {
-                    recommendationElement.setAttribute("data-typing", "false"); // Animasi selesai
-                });
+                await typeText(recommendationElement, "Unable to fetch forecast data. Please try again later.", 50);
+                recommendationElement.setAttribute("data-typing", "false"); // Animasi selesai
                 return;
             }
         
@@ -657,10 +661,11 @@
         
             const recommendationText = `Based on current CO levels prediction (${averageForecast.toFixed(1)} ppm), ${recommendation}`;
         
-            recommendationElement.setAttribute("data-typing", "true"); // Tandai animasi berjalan
-            typeText(recommendationElement, recommendationText, 50, () => {
-                recommendationElement.setAttribute("data-typing", "false"); // Animasi selesai
-            });
+            // Tampilkan teks hingga selesai
+            await typeText(recommendationElement, recommendationText, 50);
+        
+            // Tandai animasi selesai
+            recommendationElement.setAttribute("data-typing", "false");
         }
         
         // Data handling
