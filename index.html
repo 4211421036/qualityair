@@ -345,8 +345,8 @@
     <div class="app-container">
         <div class="header">
             <div>
-                <div class="greeting" id="greeting" aria-labelled="greeting" aria-hidden="true">Good Morning</div>
-                <div class="date" id="current-date"></div>
+                <div role="text" class="greeting" id="greeting" aria-labelled="greeting" aria-hidden="true">Good Morning</div>
+                <div role="text" class="date" id="current-date"></div>
             </div>
             <button type="button" name="theme" class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme" aria-label="theme-toggle">
                 <i class="fas fa-moon"></i>
@@ -356,20 +356,20 @@
         <div class="main-card">
             <div class="aqi-display">
                 <div class="aqi-circle">
-                    <div class="aqi-number" id="ppm-value" aria-labelled="ppm-value" aria-hidden="true">--</div>
-                    <div class="aqi-label">CO PPM</div>
+                    <div role="text" class="aqi-number" id="ppm-value" aria-labelled="ppm-value" aria-hidden="true">--</div>
+                    <div role="text" class="aqi-label">CO PPM</div>
                 </div>
-                <div class="aqi-status" id="air-quality-status" aria-labelled="air-quality-status" aria-hidden="true">Calculating...</div>
+                <div role="text" class="aqi-status" id="air-quality-status" aria-labelled="air-quality-status" aria-hidden="true">Calculating...</div>
             </div>
 
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-value" id="raw-value" aria-labelled="raw-value" aria-hidden="true">--</div>
-                    <div class="stat-label">Raw Value</div>
+                    <div role="text" class="stat-value" id="raw-value" aria-labelled="raw-value" aria-hidden="true">--</div>
+                    <div role="text" class="stat-label">Raw Value</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value" id="timestamp" aria-labelled="timestamp" aria-hidden="true">--</div>
-                    <div class="stat-label">Last Updated</div>
+                    <div role="text" class="stat-value" id="timestamp" aria-labelled="timestamp" aria-hidden="true">--</div>
+                    <div role="text" class="stat-label">Last Updated</div>
                 </div>
             </div>
         </div>
@@ -377,19 +377,19 @@
         <div class="nav-bar" role="navigation" aria-label="Menu Aplikasi">
             <div class="nav-item active">
                 <i class="fas fa-home"></i>
-                <span>Home</span>
+                <span role="text">Home</span>
             </div>
             <div class="nav-item" onclick="showModal('history-modal')" accesskey="h">
                 <i class="fas fa-chart-line"></i>
-                <span>History</span>
+                <span role="text">History</span>
             </div>
             <div class="nav-item" onclick="showModal('forecast-modal')" accesskey="f">
                 <i class="fas fa-cloud"></i>
-                <span>Forecast</span>
+                <span role="text">Forecast</span>
             </div>
             <div class="nav-item" onclick="showModal('info-modal')" accesskey="i">
                 <i class="fas fa-info-circle"></i>
-                <span>Info</span>
+                <span role="text">Info</span>
             </div>
         </div>
     </div>
@@ -398,7 +398,7 @@
     <div role="dialog" class="modal" id="history-modal" aria-labelled="history-modal" aria-describedby="history-modal" aria-hidden="true">
         <div class="modal-header">
             <div class="swipe-indicator"></div>
-            <div class="modal-title">CO Level History</div>
+            <div class="modal-title" role="text">CO Level History</div>
         </div>
         <div class="modal-content">
             <div class="chart-container">
@@ -411,7 +411,7 @@
     <div role="dialog" class="modal" id="forecast-modal" aria-labelled="forecast-modal" aria-describedby="forecast-modal" aria-hidden="true">
         <div class="modal-header">
             <div class="swipe-indicator"></div>
-            <div class="modal-title">Air Quality Forecast</div>
+            <div class="modal-title" role="text">Air Quality Forecast</div>
         </div>
         <div class="modal-content">
             <div class="chart-container">
@@ -419,8 +419,8 @@
             </div>
             <div class="recommendations">
                 <div class="recommendation-item">
-                    <div class="recommendation-title">Today's Recommendation</div>
-                    <div class="recommendation-text" id="daily-recommendation">
+                    <div class="recommendation-title" role="text">Today's Recommendation</div>
+                    <div class="recommendation-text" id="daily-recommendation" role="text" aria-describedby="daily-recommendation" aria-hidden="true">
                         Based on current CO levels...
                     </div>
                 </div>
@@ -432,17 +432,17 @@
     <div role="dialog" class="modal" id="info-modal" aria-labelled="info-modal" aria-describedby="info-modal" aria-hidden="true">
         <div class="modal-header">
             <div class="swipe-indicator"></div>
-            <div class="modal-title">CO Information</div>
+            <div class="modal-title" role="text">CO Information</div>
         </div>
         <div class="recommendation-item">
-            <div class="recommendation-title">CO Levels Guide</div>
+            <div class="recommendation-title" role="text">CO Levels Guide</div>
             <div class="recommendation-text">
                 <ul class="no-list-style">
-                    <li>🟢 0-50 PPM: Safe</li>
-                    <li>🟡 51-100 PPM: Moderate</li>
-                    <li>🟠 101-150 PPM: Unhealthy for Sensitive Groups</li>
-                    <li>🔴 151-200 PPM: Unhealthy</li>
-                    <li>🟣 >200 PPM: Very Dangerous</li>
+                    <li role="text">🟢 0-50 PPM: Safe</li>
+                    <li role="text">🟡 51-100 PPM: Moderate</li>
+                    <li role="text">🟠 101-150 PPM: Unhealthy for Sensitive Groups</li>
+                    <li role="text">🔴 151-200 PPM: Unhealthy</li>
+                    <li role="text">🟣 >200 PPM: Very Dangerous</li>
                 </ul>
             </div>
         </div>
