@@ -455,14 +455,14 @@
             return `?t=${new Date().getTime()}`;
         }
         
-        // Fungsi untuk menangani fetch dengan timeout
-        async function fetchWithTimeout(url, timeout = 5000) {
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), timeout);
-            
+        // Fungsi utama untuk fetching data
+        async function fetchData() {
             try {
+                // Gunakan URL GitHub Pages langsung, bukan raw.githubusercontent.com
+                const url = `https://4211421036.github.io/qualityair/data.json${getTimestampParameter()}`;
+                
                 const response = await fetch(url, {
-                    signal: controller.signal,
+                    method: 'GET',
                     cache: 'no-store',
                     headers: {
                         'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -470,18 +470,6 @@
                         'Expires': '0'
                     }
                 });
-                clearTimeout(timeoutId);
-                return response;
-            } catch (error) {
-                clearTimeout(timeoutId);
-                throw error;
-            }
-        }
-
-        async function fetchData() {
-            try {
-                const url = `https://raw.githubusercontent.com/4211421036/qualityair/main/data.json${getTimestampParameter()}`;
-                const response = await fetchWithTimeout(url);
                 
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
