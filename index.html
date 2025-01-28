@@ -201,7 +201,7 @@
             transform: translateX(-50%);
             width: 100%;
             max-width: 414px;
-            height: 80vh;
+            height: max-content;
             background: var(--modal-bg);
             border-radius: 25px 25px 0 0;
             transition: bottom 0.3s ease-out;
@@ -211,7 +211,6 @@
 
         .modal.active {
             bottom: 0;
-            height: max-content;
         }
 
         .modal-header {
