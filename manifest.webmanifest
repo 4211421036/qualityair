@@ -17,7 +17,7 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": "/",
+  "start_url": "/qualityair/",
   "display": "standalone",
   "screenshots": [
     {
@@ -30,5 +30,30 @@
     }
   ],
   "scope": "/",
-  "orientation": "portrait"
+  "orientation": "portrait",
+  "widgets": [
+    {
+      "name": "CO Monitoring",
+      "description": "Monitor CO level in real-time",
+      "short_name": "CO Monitoring",
+      "tag": "co_widget",
+      "type": "application/json",
+      "update": 100,
+      "icons": [
+        {
+          "src": "192x192.png",
+          "sizes": "192x192"
+        }
+      ],
+      "screenshots": [
+        {
+          "src": "/345677.png",
+          "sizes": "637x436",
+          "label": "Widget Screenshot"
+        }
+      ],
+      "template": "/data.json",
+      "data": "/data.json"
+    }
+  ]
 }
