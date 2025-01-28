@@ -329,15 +329,13 @@
         }
 
         .upload-progress-container {
-            width: 100%; /* Ensure the container takes the full width of the card */
+            width: max-content; /* Ensure the container takes the full width of the card */
             height: 1px; /* Adjust the height of the progress bar */
             background-color: var(--border-color);
-            margin: 4px 0;
             border-radius: 2px;
             overflow: hidden;
-            position: absolute; /* Ensure it sits inside the card */
-            top: 50%; /* Center it vertically */
-            left: 0;
+            position: fixed; /* Ensure it sits inside the card */
+            margin: -15px 10px;
         }
         
         .upload-progress-bar {
