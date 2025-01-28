@@ -55,7 +55,6 @@ async function generateHtml() {
     return generateHashedFileName(filePath);
   });
 
-  // CSP dengan strict-dynamic
   const cspContent = [
       `style-src 'self' 'nonce-${nonce}' 'unsafe-inline' https://4211421036.github.io http://4211421036.github.io https://cdnjs.cloudflare.com`,
       "object-src 'none'",
