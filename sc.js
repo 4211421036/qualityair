@@ -296,6 +296,10 @@ function generateServiceWorker() {
     const originalPath = path.join(process.cwd(), file);
     return generateHashedFileName(originalPath); // Get hashed file names
   });
+  const cssFiles = ['style.css', 'all.min.css'].map((file) => {
+    const filePath = path.join(process.cwd(), file); // Asumsi file berada di direktori kerja
+    return generateHashedFileName(filePath);
+  });
   const swContent = `
   // Service Worker for offline functionality
   const CACHE_NAME = 'co';
@@ -308,6 +312,7 @@ function generateServiceWorker() {
       '/sw.js',
       // Dynamically add each hashed JS file to the cache list
       ${hashedJsFiles.map(file => `'/${file}'`).join(',\n')}
+      ${cssFiles.map(file => `'/${file}'`).join(',\n')}
   ];
 
   // Install event
