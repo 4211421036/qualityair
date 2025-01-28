@@ -638,6 +638,9 @@
                     element.textContent += text.charAt(index);
                     index++;
                     typingTimeout = setTimeout(type, speed); // Lanjutkan animasi typing
+                } else {
+                    // Reset timeout setelah selesai
+                    typingTimeout = null;
                 }
             }
         
@@ -659,7 +662,6 @@
             const recommendationText = `Based on current CO levels prediction (${averageForecast.toFixed(1)} ppm), ${recommendation}`;
             typeText(recommendationElement, recommendationText, 50); // Animasi typing dengan kecepatan 50ms
         }
-
         
         // Data handling
         const historicalData = {
