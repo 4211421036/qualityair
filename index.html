@@ -600,9 +600,9 @@
                             // Delay untuk proses berikutnya
                             setTimeout(() => {
                                 fetchData(); // Mengulang proses ketika progress mencapai 100%
-                            }, 1); // Memberikan waktu 1 detik sebelum memulai proses baru
+                            }, 1000); // Memberikan waktu 1 detik sebelum memulai proses baru
                         }
-                    }, jsonData.timestamp);  // Interval 1 detik untuk simulasi progress
+                    }, 1000);  // Interval 1 detik untuk simulasi progress
         
                     // Update tampilan utama dengan data terbaru
                     document.getElementById('ppm-value').textContent = ppm.toFixed(1);
