@@ -617,20 +617,31 @@
                 return "the air quality is hazardous. Remain indoors and use air purifiers if available.";
             }
         }
+        
+        // Variabel global untuk menghentikan animasi typing sebelumnya
+        let typingTimeout;
+        
         // Fungsi untuk menampilkan teks dengan animasi typing effect
         function typeText(element, text, speed = 50) {
-            element.textContent = ""; // Kosongkan teks sebelumnya
+            // Hentikan animasi typing sebelumnya jika ada
+            if (typingTimeout) {
+                clearTimeout(typingTimeout);
+            }
+        
+            // Kosongkan teks sebelumnya
+            element.textContent = "";
             let index = 0;
         
+            // Fungsi untuk menampilkan karakter secara bertahap
             function type() {
                 if (index < text.length) {
                     element.textContent += text.charAt(index);
                     index++;
-                    setTimeout(type, speed); // Ulangi hingga semua karakter selesai
+                    typingTimeout = setTimeout(type, speed); // Lanjutkan animasi typing
                 }
             }
         
-            type();
+            type(); // Mulai animasi
         }
         
         // Fungsi untuk memperbarui elemen rekomendasi berdasarkan forecast prediction
@@ -646,8 +657,9 @@
             const recommendation = getRecommendation(averageForecast);
         
             const recommendationText = `Based on current CO levels prediction (${averageForecast.toFixed(1)} ppm), ${recommendation}`;
-            typeText(recommendationElement, recommendationText, 50); // Tambahkan animasi typing dengan kecepatan 50ms
+            typeText(recommendationElement, recommendationText, 50); // Animasi typing dengan kecepatan 50ms
         }
+
         
         // Data handling
         const historicalData = {
