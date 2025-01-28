@@ -623,18 +623,15 @@
                             });
                         }
                     }
-        
-                    // Menambahkan animasi saat data diperbarui
-                    document.getElementById('ppm-value').classList.add('update-animation');
-                    setTimeout(() => {
-                        document.getElementById('ppm-value').classList.remove('update-animation');
-                    }, 500);
-        
                 } else {
                     // Jika timestamp tidak berubah, tetap beri status "queued"
                     document.querySelector('.upload-status').textContent = 'Dalam antrian...';
                 }
-        
+                // Menambahkan animasi saat data diperbarui
+                document.getElementById('ppm-value').classList.add('update-animation');
+                setTimeout(() => {
+                    document.getElementById('ppm-value').classList.remove('update-animation');
+                }, 500);
             } catch (error) {
                 console.error('Error fetching data:', error);
                 // Jika gagal, tampilkan status "gagal"
