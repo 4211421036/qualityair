@@ -343,12 +343,12 @@
         });
     </script>
     <div tabindex="0" class="app-container">
-        <div role="tree" class="header">
-            <div role="treeitem">
+        <div role="navigation" class="header">
+            <div role="gruop">
                 <div role="text" class="greeting" id="greeting" aria-labelled="greeting" aria-hidden="true">Good Morning</div>
                 <div role="text" class="date" id="current-date"></div>
             </div>
-            <button tabindex="-1" type="button" name="theme" class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme" aria-label="theme-toggle">
+            <button role="button" tabindex="-1" type="button" name="theme" class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme" aria-label="theme-toggle">
                 <i class="fas fa-moon"></i>
             </button>
         </div>
@@ -363,14 +363,14 @@
                 <p id="air-status" role="tooltip">Status CO</p>
             </div>
 
-            <div role="treeitem" class="stats-grid" tabindex="0">
-                <div role="gruop" class="stat-card">
-                    <div role="treeitem" tabindex="2" role="text" class="stat-value" id="raw-value" aria-labelled="raw-value" aria-hidden="true">--</div>
-                    <div role="treeitem" role="text" class="stat-label">Raw Value</div>
+            <div role="gruop" class="stats-grid" tabindex="0">
+                <div class="stat-card">
+                    <div role="text" tabindex="2" role="text" class="stat-value" id="raw-value" aria-labelled="raw-value" aria-hidden="true">--</div>
+                    <div role="text" role="text" class="stat-label">Raw Value</div>
                 </div>
-                <div role="gruop" class="stat-card">
+                <div class="stat-card">
                     <div role="treeitem" tabindex="2" role="text" class="stat-value" id="timestamp" aria-labelled="timestamp" aria-hidden="true">--</div>
-                    <div role="treeitem" role="text" class="stat-label">Last Updated</div>
+                    <div role="text" role="text" class="stat-label">Last Updated</div>
                 </div>
             </div>
         </div>
