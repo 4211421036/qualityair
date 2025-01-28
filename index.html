@@ -538,6 +538,95 @@
         document.querySelector('.theme-toggle i').className =
             savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
 
+        // Modal handling
+        let activeModal = null;
+        let startY = 0;
+        let currentY = 0;
+
+        function showModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.add('active');
+            activeModal = modal;
+
+            // Update nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.textContent.toLowerCase().includes(modalId.split('-')[0])) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        function hideModal(modal) {
+            modal.classList.remove('active');
+            activeModal = null;
+
+            // Reactivate home nav item
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.textContent.toLowerCase().includes('home')) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        // Touch events for modals
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('touchstart', (e) => {
+                startY = e.touches[0].clientY;
+            });
+
+            modal.addEventListener('touchmove', (e) => {
+                if (!activeModal) return;
+
+                currentY = e.touches[0].clientY;
+                const deltaY = currentY - startY;
+
+                if (deltaY > 0) {
+                    e.preventDefault();
+                    modal.style.transform = `translate(-50%, ${deltaY}px)`;
+                }
+            });
+
+            modal.addEventListener('touchend', (e) => {
+                if (!activeModal) return;
+
+                const deltaY = currentY - startY;
+
+                if (deltaY > 100) {
+                    hideModal(modal);
+                }
+
+                modal.style.transform = 'translateX(-50%)';
+            });
+        });
+
+        // Data handling
+        const historicalData = {
+            times: [],
+            values: [],
+            rawValues: [],
+            forecastTimes: [],
+            forecastValues: []
+        };
+
+        function updateHistoryChart(timestamp, ppm, rawValue) {
+            // Keep last 24 readings
+            if (historicalData.times.length > 24) {
+                historicalData.times.shift();
+                historicalData.values.shift();
+                historicalData.rawValues.shift();
+            }
+
+            historicalData.times.push(new Date(timestamp).toLocaleTimeString());
+            historicalData.values.push(ppm);
+            historicalData.rawValues.push(rawValue);
+
+            historyChart.data.labels = historicalData.times;
+            historyChart.data.datasets[0].data = historicalData.values;
+            historyChart.update();
+        }
+
         // Charts initialization
         const historyCtx = document.getElementById('historyChart').getContext('2d');
         const historyChart = new Chart(historyCtx, {
@@ -613,8 +702,14 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                interaction: {
+                    intersect: false,
+                    mode: 'nearest'
+                },
                 plugins: {
                     legend: {
+                        display: true,
+                        position: 'top',
                         labels: {
                             color: getComputedStyle(document.documentElement)
                                 .getPropertyValue('--text-primary')
@@ -635,6 +730,10 @@
                         ticks: {
                             color: getComputedStyle(document.documentElement)
                                 .getPropertyValue('--text-secondary')
+                        },
+                        title: {
+                            display: true,
+                            text: 'CO Level (PPM)'
                         }
                     },
                     x: {
@@ -645,34 +744,41 @@
                         ticks: {
                             color: getComputedStyle(document.documentElement)
                                 .getPropertyValue('--text-secondary')
+                        },
+                        title: {
+                            display: true,
+                            text: 'Time'
                         }
                     }
                 }
             }
         });
 
-        // Fungsi untuk memprediksi nilai CO berikutnya
+        // Improved prediction function
         function predictNextValues(values, periods = 6) {
             if (values.length < 2) return Array(periods).fill(values[0] || 0);
-        
-            // Calculate average change between consecutive values
+            
+            // Calculate average change using last 6 values
+            const recentValues = values.slice(-6);
             let changes = [];
-            for (let i = 1; i < values.length; i++) {
-                changes.push(values[i] - values[i - 1]);
+            for (let i = 1; i < recentValues.length; i++) {
+                changes.push(recentValues[i] - recentValues[i - 1]);
             }
+            
             const avgChange = changes.reduce((a, b) => a + b, 0) / changes.length;
-        
-            // Generate predictions based on the average change
+            
+            // Generate predictions with weighted randomness
             const predictions = [];
             let lastValue = values[values.length - 1];
-        
+            
             for (let i = 0; i < periods; i++) {
                 lastValue += avgChange;
-                // Optional: Add a smaller random noise for variation
-                const noise = (Math.random() - 0.5) * 0.5 * Math.abs(avgChange);  // Adjust noise scaling
+                // Add weighted random variation
+                const variation = avgChange * 0.2; // 20% variation
+                const noise = (Math.random() - 0.5) * variation;
                 predictions.push(Math.max(0, lastValue + noise));
             }
-        
+            
             return predictions;
         }
         // Update fungsi updateHistoryChart menjadi:
@@ -698,6 +804,16 @@
             const currentTime = new Date(timestamp);
             const forecastTimes = [];
             const forecastLabels = [];
+            historicalData.forecastValues = [];
+            historicalData.forecastTimes = [];
+            
+            // Generate future timestamps
+            for (let i = 1; i <= 6; i++) {
+                const futureTime = new Date(currentTime.getTime() + i * 5 * 60000);
+                const futureTimeStr = futureTime.toLocaleTimeString();
+                historicalData.forecastTimes.push(futureTimeStr);
+                forecastLabels.push(futureTimeStr);
+            }
 
             // Gunakan 6 data terakhir untuk historical
             const recentTimes = historicalData.times.slice(-6);
@@ -710,11 +826,18 @@
                 forecastLabels.push(futureTime.toLocaleTimeString());
             }
 
-            const predictions = predictNextValues(historicalData.values, 6);
+            // Generate predictions
+            historicalData.forecastValues = predictNextValues(historicalData.values);
+            
+            // Update forecast chart
+            const recentTimes = historicalData.times.slice(-6);
+            const recentValues = historicalData.values.slice(-6);
+            
 
             forecastChart.data.labels = [...recentTimes, ...forecastLabels];
-            forecastChart.data.datasets[0].data = recentValues;
-            forecastChart.data.datasets[1].data = [...Array(recentTimes.length).fill(null), ...predictions];
+            forecastChart.data.datasets[0].data = [...recentValues, ...Array(6).fill(null)];
+            forecastChart.data.datasets[1].data = [...Array(6).fill(null), ...historicalData.forecastValues];
+            
             forecastChart.update();
         }
 
@@ -741,93 +864,6 @@
 
             historyChart.update();
             forecastChart.update();
-        }
-
-        // Modal handling
-        let activeModal = null;
-        let startY = 0;
-        let currentY = 0;
-
-        function showModal(modalId) {
-            const modal = document.getElementById(modalId);
-            modal.classList.add('active');
-            activeModal = modal;
-
-            // Update nav items
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-                if (item.textContent.toLowerCase().includes(modalId.split('-')[0])) {
-                    item.classList.add('active');
-                }
-            });
-        }
-
-        function hideModal(modal) {
-            modal.classList.remove('active');
-            activeModal = null;
-
-            // Reactivate home nav item
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-                if (item.textContent.toLowerCase().includes('home')) {
-                    item.classList.add('active');
-                }
-            });
-        }
-
-        // Touch events for modals
-        document.querySelectorAll('.modal').forEach(modal => {
-            modal.addEventListener('touchstart', (e) => {
-                startY = e.touches[0].clientY;
-            });
-
-            modal.addEventListener('touchmove', (e) => {
-                if (!activeModal) return;
-
-                currentY = e.touches[0].clientY;
-                const deltaY = currentY - startY;
-
-                if (deltaY > 0) {
-                    e.preventDefault();
-                    modal.style.transform = `translate(-50%, ${deltaY}px)`;
-                }
-            });
-
-            modal.addEventListener('touchend', (e) => {
-                if (!activeModal) return;
-
-                const deltaY = currentY - startY;
-
-                if (deltaY > 100) {
-                    hideModal(modal);
-                }
-
-                modal.style.transform = 'translateX(-50%)';
-            });
-        });
-
-        // Data handling
-        const historicalData = {
-            times: [],
-            values: [],
-            rawValues: []
-        };
-
-        function updateHistoryChart(timestamp, ppm, rawValue) {
-            // Keep last 24 readings
-            if (historicalData.times.length > 24) {
-                historicalData.times.shift();
-                historicalData.values.shift();
-                historicalData.rawValues.shift();
-            }
-
-            historicalData.times.push(new Date(timestamp).toLocaleTimeString());
-            historicalData.values.push(ppm);
-            historicalData.rawValues.push(rawValue);
-
-            historyChart.data.labels = historicalData.times;
-            historyChart.data.datasets[0].data = historicalData.values;
-            historyChart.update();
         }
 
         function getAirQualityStatus(ppm) {
