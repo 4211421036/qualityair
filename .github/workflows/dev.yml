@@ -5,7 +5,7 @@ on:
     paths:
       - 'data.json'
   schedule:
-    - cron: '*/5 * * * *'  # Runs every 5 minutes
+    - cron: '*/1 * * * *'  # Runs every 5 minutes
   workflow_dispatch:  # Enables manual trigger
 
 jobs:
