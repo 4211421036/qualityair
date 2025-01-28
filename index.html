@@ -331,7 +331,7 @@
 </head>
 
 <body>
-    <div id="splash-screen" class="splash-screen">
+    <div id="splash-screen" class="splash-screen" aria-labelled="splash-screen">
         <img class="logos" src="https://4211421036.github.io/g4lihru/987654567.png" alt="Logo" aria-label="logo">
     </div>
     <script>
@@ -345,10 +345,10 @@
     <div class="app-container">
         <div class="header">
             <div>
-                <div class="greeting" id="greeting">Good Morning</div>
+                <div class="greeting" id="greeting" aria-labelled="greeting">>Good Morning</div>
                 <div class="date" id="current-date"></div>
             </div>
-            <button type="button" name="theme" class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
+            <button type="button" name="theme" class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme" aria-label="theme-toggle">
                 <i class="fas fa-moon"></i>
             </button>
         </div>
@@ -356,19 +356,19 @@
         <div class="main-card">
             <div class="aqi-display">
                 <div class="aqi-circle">
-                    <div class="aqi-number" id="ppm-value">--</div>
+                    <div class="aqi-number" id="ppm-value" aria-labelled="ppm-value">--</div>
                     <div class="aqi-label">CO PPM</div>
                 </div>
-                <div class="aqi-status" id="air-quality-status">Calculating...</div>
+                <div class="aqi-status" id="air-quality-status" aria-labelled="air-quality-status">Calculating...</div>
             </div>
 
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-value" id="raw-value">--</div>
+                    <div class="stat-value" id="raw-value" aria-labelled="raw-value">--</div>
                     <div class="stat-label">Raw Value</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value" id="timestamp">--</div>
+                    <div class="stat-value" id="timestamp" aria-labelled="timestamp">--</div>
                     <div class="stat-label">Last Updated</div>
                 </div>
             </div>
@@ -379,15 +379,15 @@
                 <i class="fas fa-home"></i>
                 <span>Home</span>
             </div>
-            <div class="nav-item" onclick="showModal('history-modal')">
+            <div class="nav-item" onclick="showModal('history-modal')" accesskey="h">
                 <i class="fas fa-chart-line"></i>
                 <span>History</span>
             </div>
-            <div class="nav-item" onclick="showModal('forecast-modal')">
+            <div class="nav-item" onclick="showModal('forecast-modal')" accesskey="f">
                 <i class="fas fa-cloud"></i>
                 <span>Forecast</span>
             </div>
-            <div class="nav-item" onclick="showModal('info-modal')">
+            <div class="nav-item" onclick="showModal('info-modal')" accesskey="i">
                 <i class="fas fa-info-circle"></i>
                 <span>Info</span>
             </div>
@@ -395,27 +395,27 @@
     </div>
 
     <!-- History Modal -->
-    <div class="modal" id="history-modal">
+    <div class="modal" id="history-modal" aria-labelled="history-modal">
         <div class="modal-header">
             <div class="swipe-indicator"></div>
             <div class="modal-title">CO Level History</div>
         </div>
         <div class="modal-content">
             <div class="chart-container">
-                <canvas id="historyChart"></canvas>
+                <canvas id="historyChart" aria-labelled="historyChart"></canvas>
             </div>
         </div>
     </div>
 
     <!-- Forecast Modal -->
-    <div class="modal" id="forecast-modal">
+    <div class="modal" id="forecast-modal" aria-labelled="forecast-modal">
         <div class="modal-header">
             <div class="swipe-indicator"></div>
             <div class="modal-title">Air Quality Forecast</div>
         </div>
         <div class="modal-content">
             <div class="chart-container">
-                <canvas id="forecastChart"></canvas>
+                <canvas id="forecastChart" aria-labelled="forecastChart"></canvas>
             </div>
             <div class="recommendations">
                 <div class="recommendation-item">
@@ -429,7 +429,7 @@
     </div>
 
     <!-- Info Modal -->
-    <div class="modal" id="info-modal">
+    <div class="modal" id="info-modal" aria-labelled="forecast-modal">
         <div class="modal-header">
             <div class="swipe-indicator"></div>
             <div class="modal-title">CO Information</div>
