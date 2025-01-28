@@ -39,16 +39,6 @@ function generateInlineScriptHash(scriptContent) {
 async function generateHtml() {
   // Generate nonce untuk setiap elemen
   const nonce = generateNonce();
-
-  // Daftar file JavaScript yang digunakan
-  const jsFiles = ['main.js'];
-
-  // Menghasilkan nama file hash untuk setiap file JS
-  const hashedJsFiles = jsFiles.map(file => {
-    const originalPath = path.join(process.cwd(), file);
-    return generateHashedFileName(originalPath); // Nama hash file, tidak perlu membuat salinan
-  });
-
   const cssFiles = ['style.css'];
   const hashedCssFiles = cssFiles.map((file) => {
     const filePath = path.join(process.cwd(), file); // Asumsi file berada di direktori kerja
@@ -101,9 +91,9 @@ async function generateHtml() {
       <link rel="manifest" href="/qualityair/manifest.webmanifest">
       <link rel="canonical" href="https://4211421036.github.io/qualityair/">
       <link rel="manifest" href="manifest.webmanifest" crossorigin="use-credentials">
-      <link nonce="${nonce}" integrity="sha384-${generateIntegrityHash}" crossorigin="anonymous" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+      <link nonce="${nonce}" crossorigin="anonymous" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
       <meta http-equiv="Content-Security-Policy" content="${cspContent}">
-      <script nonce="${nonce}" integrity="sha384-${generateIntegrityHash}" crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js" defer></script>
+      <script nonce="${nonce}" crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js" defer></script>
       ${hashedCssFiles
           .map(
             (file) =>
@@ -112,17 +102,6 @@ async function generateHtml() {
               )}" crossorigin="anonymous">`
           )
           .join('\n')}`;
-
-  hashedJsFiles.forEach((file) => {
-    const filePath = path.join(process.cwd(), file); // Lokasi file asli
-    const hashedFileName = generateHashedFileName(filePath);
-  
-    // Verifikasi hash integritas
-    const integrityHash = generateIntegrityHash(filePath);
-    htmlContent += `
-      <script src="${hashedFileName}" nonce="${nonce}" integrity="sha384-${integrityHash}" crossorigin="anonymous" defer></script>
-    `;
-  });
   
   // Verifikasi file asli
   jsFiles.forEach(file => {
@@ -265,6 +244,419 @@ async function generateHtml() {
         }
         console.log('Generated automatic on: ${new Date().toLocaleString()}');
       </script>
+      <script nonce="${nonce}">
+        // Theme handling
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        
+            const themeIcon = document.querySelector('.theme-toggle i');
+            themeIcon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        }
+        
+        // Set initial theme
+        const savedTheme = localStorage.getItem('theme') ||
+            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.querySelector('.theme-toggle i').className =
+            savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        
+        // Charts initialization
+        const historyCtx = document.getElementById('historyChart').getContext('2d');
+        const historyChart = new Chart(historyCtx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'CO Level (PPM)',
+                    data: [],
+                    borderColor: '#3b82f6',
+                    tension: 0.4,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: getComputedStyle(document.documentElement)
+                                .getPropertyValue('--text-primary')
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: getComputedStyle(document.documentElement)
+                                .getPropertyValue('--border-color')
+                        },
+                        ticks: {
+                            color: getComputedStyle(document.documentElement)
+                                .getPropertyValue('--text-secondary')
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: getComputedStyle(document.documentElement)
+                                .getPropertyValue('--border-color')
+                        },
+                        ticks: {
+                            color: getComputedStyle(document.documentElement)
+                                .getPropertyValue('--text-secondary')
+                        }
+                    }
+                }
+            }
+        });
+        
+        const forecastCtx = document.getElementById('forecastChart').getContext('2d');
+        const forecastChart = new Chart(forecastCtx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Historical',
+                    data: [],
+                    borderColor: '#3b82f6',
+                    tension: 0.4,
+                    fill: false
+                },
+                {
+                    label: 'Forecast',
+                    data: [],
+                    borderColor: '#10b981',
+                    borderDash: [5, 5],
+                    tension: 0.4,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: getComputedStyle(document.documentElement)
+                                .getPropertyValue('--text-primary')
+                        }
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: getComputedStyle(document.documentElement)
+                                .getPropertyValue('--border-color')
+                        },
+                        ticks: {
+                            color: getComputedStyle(document.documentElement)
+                                .getPropertyValue('--text-secondary')
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: getComputedStyle(document.documentElement)
+                                .getPropertyValue('--border-color')
+                        },
+                        ticks: {
+                            color: getComputedStyle(document.documentElement)
+                                .getPropertyValue('--text-secondary')
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Fungsi untuk memprediksi nilai CO berikutnya
+        function predictNextValues(values, periods = 6) {
+            if (values.length < 2) return Array(periods).fill(values[0] || 0);
+        
+            // Hitung rata-rata perubahan
+            let changes = [];
+            for (let i = 1; i < values.length; i++) {
+                changes.push(values[i] - values[i - 1]);
+            }
+            const avgChange = changes.reduce((a, b) => a + b, 0) / changes.length;
+        
+            // Generate prediksi
+            const predictions = [];
+            let lastValue = values[values.length - 1];
+        
+            for (let i = 0; i < periods; i++) {
+                lastValue += avgChange;
+                // Tambahkan sedikit random noise untuk variasi
+                const noise = (Math.random() - 0.5) * Math.abs(avgChange);
+                predictions.push(Math.max(0, lastValue + noise));
+            }
+        
+            return predictions;
+        }
+        
+        // Update fungsi updateHistoryChart menjadi:
+        function updateHistoryChart(timestamp, ppm, rawValue) {
+            // Keep last 24 readings
+            if (historicalData.times.length > 24) {
+                historicalData.times.shift();
+                historicalData.values.shift();
+                historicalData.rawValues.shift();
+            }
+        
+            const timeStr = new Date(timestamp).toLocaleTimeString();
+            historicalData.times.push(timeStr);
+            historicalData.values.push(ppm);
+            historicalData.rawValues.push(rawValue);
+        
+            // Update history chart
+            historyChart.data.labels = historicalData.times;
+            historyChart.data.datasets[0].data = historicalData.values;
+            historyChart.update();
+        
+            // Update forecast chart
+            const currentTime = new Date(timestamp);
+            const forecastTimes = [];
+            const forecastLabels = [];
+        
+            // Gunakan 6 data terakhir untuk historical
+            const recentTimes = historicalData.times.slice(-6);
+            const recentValues = historicalData.values.slice(-6);
+        
+            // Generate 6 forecast points
+            for (let i = 1; i <= 6; i++) {
+                const futureTime = new Date(currentTime.getTime() + i * 5 * 60000); // 5 menit interval
+                forecastTimes.push(futureTime);
+                forecastLabels.push(futureTime.toLocaleTimeString());
+            }
+        
+            const predictions = predictNextValues(historicalData.values, 6);
+        
+            forecastChart.data.labels = [...recentTimes, ...forecastLabels];
+            forecastChart.data.datasets[0].data = recentValues;
+            forecastChart.data.datasets[1].data = [...Array(recentTimes.length).fill(null), ...predictions];
+            forecastChart.update();
+        }
+        
+        // Tambahkan di fungsi updateChartColors:
+        function updateChartColors() {
+            const textColor = getComputedStyle(document.documentElement)
+                .getPropertyValue('--text-primary');
+            const gridColor = getComputedStyle(document.documentElement)
+                .getPropertyValue('--border-color');
+        
+            // Update history chart colors
+            historyChart.options.scales.y.grid.color = gridColor;
+            historyChart.options.scales.x.grid.color = gridColor;
+            historyChart.options.scales.y.ticks.color = textColor;
+            historyChart.options.scales.x.ticks.color = textColor;
+            historyChart.options.plugins.legend.labels.color = textColor;
+        
+            // Update forecast chart colors
+            forecastChart.options.scales.y.grid.color = gridColor;
+            forecastChart.options.scales.x.grid.color = gridColor;
+            forecastChart.options.scales.y.ticks.color = textColor;
+            forecastChart.options.scales.x.ticks.color = textColor;
+            forecastChart.options.plugins.legend.labels.color = textColor;
+        
+            historyChart.update();
+            forecastChart.update();
+        }
+        
+        // Modal handling
+        let activeModal = null;
+        let startY = 0;
+        let currentY = 0;
+        
+        function showModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.add('active');
+            activeModal = modal;
+        
+            // Update nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.textContent.toLowerCase().includes(modalId.split('-')[0])) {
+                    item.classList.add('active');
+                }
+            });
+        }
+        
+        function hideModal(modal) {
+            modal.classList.remove('active');
+            activeModal = null;
+        
+            // Reactivate home nav item
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.textContent.toLowerCase().includes('home')) {
+                    item.classList.add('active');
+                }
+            });
+        }
+        
+        // Touch events for modals
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('touchstart', (e) => {
+                startY = e.touches[0].clientY;
+            });
+        
+            modal.addEventListener('touchmove', (e) => {
+                if (!activeModal) return;
+        
+                currentY = e.touches[0].clientY;
+                const deltaY = currentY - startY;
+        
+                if (deltaY > 0) {
+                    e.preventDefault();
+                    modal.style.transform = `translate(-50%, ${deltaY}px)`;
+                }
+            });
+        
+            modal.addEventListener('touchend', (e) => {
+                if (!activeModal) return;
+        
+                const deltaY = currentY - startY;
+        
+                if (deltaY > 100) {
+                    hideModal(modal);
+                }
+        
+                modal.style.transform = 'translateX(-50%)';
+            });
+        });
+        
+        // Data handling
+        const historicalData = {
+            times: [],
+            values: [],
+            rawValues: []
+        };
+        
+        function updateHistoryChart(timestamp, ppm, rawValue) {
+            // Keep last 24 readings
+            if (historicalData.times.length > 24) {
+                historicalData.times.shift();
+                historicalData.values.shift();
+                historicalData.rawValues.shift();
+            }
+        
+            historicalData.times.push(new Date(timestamp).toLocaleTimeString());
+            historicalData.values.push(ppm);
+            historicalData.rawValues.push(rawValue);
+        
+            historyChart.data.labels = historicalData.times;
+            historyChart.data.datasets[0].data = historicalData.values;
+            historyChart.update();
+        }
+        
+        function getAirQualityStatus(ppm) {
+            if (ppm <= 50) return '🟢 Safe';
+            if (ppm <= 100) return '🟡 Moderate';
+            if (ppm <= 150) return '🟠 Unhealthy for Sensitive Groups';
+            if (ppm <= 200) return '🔴 Unhealthy';
+            return '🟣 Very Dangerous';
+        }
+        
+        function getRecommendation(ppm) {
+            if (ppm <= 50) {
+                return 'Air quality is good. Perfect for outdoor activities.';
+            } else if (ppm <= 100) {
+                return 'Air quality is acceptable. Consider reducing prolonged outdoor activities if you are sensitive to CO.';
+            } else if (ppm <= 150) {
+                return 'Members of sensitive groups may experience health effects. Limit outdoor exposure.';
+            } else if (ppm <= 200) {
+                return 'Everyone may begin to experience health effects. Avoid outdoor activities.';
+            } else {
+                return 'Health alert: everyone may experience serious health effects. Stay indoors.';
+            }
+        }
+        
+        function updateGreeting() {
+            const hour = new Date().getHours();
+            const greeting = document.getElementById('greeting');
+        
+            if (hour >= 5 && hour < 12) greeting.textContent = 'Good Morning';
+            else if (hour >= 12 && hour < 17) greeting.textContent = 'Good Afternoon';
+            else if (hour >= 17 && hour < 21) greeting.textContent = 'Good Evening';
+            else greeting.textContent = 'Good Night';
+        }
+        
+        function formatTimestamp(timestamp) {
+            const date = new Date(timestamp);
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            return `${hours}:${minutes}`;
+        }
+        
+        async function fetchData() {
+            try {
+                const response = await fetch('https://raw.githubusercontent.com/4211421036/qualityair/main/data.json');
+                const data = await response.json();
+        
+                // Update main display
+                document.getElementById('ppm-value').textContent = data.data.ppm.toFixed(1);
+                document.getElementById('raw-value').textContent = data.data.raw_value;
+                document.getElementById('air-quality-status').textContent = getAirQualityStatus(data.data.ppm);
+                document.getElementById('timestamp').textContent = formatTimestamp(data.timestamp);
+                document.getElementById('daily-recommendation').textContent = getRecommendation(data.data.ppm);
+        
+                // Update chart
+                updateHistoryChart(data.timestamp, data.data.ppm, data.data.raw_value);
+        
+                // Update theme-based colors
+                updateChartColors();
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+        
+        function updateChartColors() {
+            const textColor = getComputedStyle(document.documentElement)
+                .getPropertyValue('--text-primary');
+            const gridColor = getComputedStyle(document.documentElement)
+                .getPropertyValue('--border-color');
+        
+            historyChart.options.scales.y.grid.color = gridColor;
+            historyChart.options.scales.x.grid.color = gridColor;
+            historyChart.options.scales.y.ticks.color = textColor;
+            historyChart.options.scales.x.ticks.color = textColor;
+            historyChart.options.plugins.legend.labels.color = textColor;
+            historyChart.update();
+        }
+        
+        // Set current date
+        document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+        
+        // Initial setup
+        updateGreeting();
+        fetchData();
+        
+        // Update data every 5 seconds
+        setInterval(fetchData, 5000);
+        
+        // Update greeting every minute
+        setInterval(updateGreeting, 60000);
+        
+        // Listen for system theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+            const newTheme = e.matches ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateChartColors();
+        });
+      </script>
       <!-- page generated automatic: ${new Date().toLocaleString()} -->
     </body>
   </html>`;
@@ -292,10 +684,6 @@ async function generateHtml() {
 }
 
 function generateServiceWorker() {
-  const hashedJsFiles = ['main.js'].map(file => {
-    const originalPath = path.join(process.cwd(), file);
-    return generateHashedFileName(originalPath); // Get hashed file names
-  });
   const cssFiles = ['style.css', 'all.min.css'].map((file) => {
     const filePath = path.join(process.cwd(), file); // Asumsi file berada di direktori kerja
     return generateHashedFileName(filePath);
@@ -310,8 +698,6 @@ function generateServiceWorker() {
       '/192x192.png',
       '/512x512.png',
       '/sw.js',
-      // Dynamically add each hashed JS file to the cache list
-      ${hashedJsFiles.map(file => `'/${file}'`).join(',\n')}
       ${cssFiles.map(file => `'/${file}'`).join(',\n')}
   ];
 
