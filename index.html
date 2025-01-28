@@ -636,9 +636,8 @@
         }
         
         // Fungsi untuk menampilkan teks dengan animasi typing effect
-        function typeText(element, text, speed = 50) {
+        async function typeText(element, text, speed = 50) {
             return new Promise((resolve) => {
-                element.textContent = ""; // Kosongkan teks sebelumnya
                 let index = 0;
         
                 function type() {
@@ -651,13 +650,14 @@
                     }
                 }
         
+                element.textContent = ""; // Kosongkan teks sebelumnya
                 type();
             });
         }
         
-        // Variabel global untuk menyimpan nilai prediksi terakhir
+        // Variabel global untuk melacak status penulisan dan prediksi terakhir
         let lastForecast = null;
-        let isTyping = false; // Menandai apakah sedang dalam proses mengetik
+        let isTyping = false;
         
         // Fungsi untuk memperbarui elemen rekomendasi berdasarkan forecast prediction
         async function updateRecommendation(forecastValues) {
@@ -666,23 +666,30 @@
             // Hitung rata-rata prediksi
             const averageForecast = forecastValues.reduce((sum, val) => sum + val, 0) / forecastValues.length;
         
-            // Jika nilai prediksi sama dengan yang terakhir atau sedang mengetik, jangan lakukan apa-apa
+            // Jangan lakukan apa-apa jika nilai prediksi sama dengan yang terakhir
             if (lastForecast !== null && averageForecast === lastForecast) {
-                return; // Tidak ada pembaruan
+                return;
             }
         
-            // Tandai sedang mengetik dan perbarui nilai prediksi terakhir
-            lastForecast = averageForecast;
+            // Jika sedang mengetik, tunggu selesai sebelum memulai
+            if (isTyping) {
+                return;
+            }
+        
+            // Tandai sedang mengetik
             isTyping = true;
+            lastForecast = averageForecast;
         
             // Dapatkan rekomendasi berdasarkan prediksi
             const recommendation = getRecommendation(averageForecast);
-            const recommendationText = `Based on current CO levels prediction (${averageForecast.toFixed(1)} ppm), ${recommendation}`;
+            const recommendationText = `Based on current CO levels prediction (${averageForecast.toFixed(
+                1
+            )} ppm), ${recommendation}`;
         
-            // Tampilkan teks hingga selesai
+            // Animasi mengetik hingga selesai
             await typeText(recommendationElement, recommendationText, 50);
         
-            // Tandai proses mengetik selesai
+            // Tandai selesai mengetik
             isTyping = false;
         }
         
