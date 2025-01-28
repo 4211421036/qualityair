@@ -32,9 +32,6 @@ jobs:
           # Read current data.json
           if [ -f data.json ]; then
             echo "Found existing data.json"
-            # Add cache busting header
-            sed -i '1i\{"last_refresh": "'$TIMESTAMP'",\' data.json
-            sed -i '2i\ "cache_buster": "'$(date +%s)'",' data.json
           fi
 
       - name: Commit and push if changed
