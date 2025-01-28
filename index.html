@@ -860,7 +860,7 @@
             forecastChart.data.datasets[1].data = [...Array(6).fill(null), ...historicalData.forecastValues];
             
             forecastChart.update();
-            updateRecommendation(forecastChart.data.datasets[0].data);
+            updateRecommendation(historicalData.forecastValues);
         }
 
         // Tambahkan di fungsi updateChartColors:
