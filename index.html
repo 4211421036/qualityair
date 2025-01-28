@@ -380,15 +380,15 @@
                 <i class="fas fa-home"></i>
                 <span role="text">Home</span>
             </div>
-            <div tabindex="-1" role="button" class="nav-item" onclick="showModal('history-modal')" accesskey="h">
+            <div tabindex="-1" id="history" role="button" class="nav-item" onclick="showModal('history-modal')" accesskey="h">
                 <i class="fas fa-chart-line"></i>
                 <span role="text">History</span>
             </div>
-            <div tabindex="-1" role="button" class="nav-item" onclick="showModal('forecast-modal')" accesskey="f">
+            <div tabindex="-1" id="fores" role="button" class="nav-item" onclick="showModal('forecast-modal')" accesskey="f">
                 <i class="fas fa-cloud"></i>
                 <span role="text">Forecast</span>
             </div>
-            <div tabindex="-1" role="button" class="nav-item" onclick="showModal('info-modal')" accesskey="i">
+            <div tabindex="-1" id="infos" role="button" class="nav-item" onclick="showModal('info-modal')" accesskey="i">
                 <i class="fas fa-info-circle"></i>
                 <span role="text">Info</span>
             </div>
@@ -396,7 +396,7 @@
     </div>
 
     <!-- History Modal -->
-    <div tabindex="1" role="dialog" class="modal" id="history-modal" aria-labelled="history-modal" aria-describedby="history-modal" aria-hidden="true">
+    <div tabindex="1" role="dialog" class="modal" id="history-modal" aria-labelled="history" aria-describedby="history-modal" aria-hidden="true">
         <div role="gruop" tabindex="2" class="modal-header">
             <div role="treeitem" tabindex="3" class="swipe-indicator"></div>
             <div role="treeitem" tabindex="3" class="modal-title" role="text">CO Level History</div>
@@ -409,7 +409,7 @@
     </div>
 
     <!-- Forecast Modal -->
-    <div tabindex="2" role="dialog" class="modal" id="forecast-modal" aria-labelled="forecast-modal" aria-describedby="forecast-modal" aria-hidden="true">
+    <div tabindex="2" role="dialog" class="modal" id="forecast-modal" aria-labelled="fores" aria-describedby="forecast-modal" aria-hidden="true">
         <div role="gruop" tabindex="3" class="modal-header">
             <div role="treeitem" tabindex="4" class="swipe-indicator"></div>
             <div role="treeitem" tabindex="4" class="modal-title" role="text">Air Quality Forecast</div>
@@ -430,7 +430,7 @@
     </div>
 
     <!-- Info Modal -->
-    <div tabindex="3" role="dialog" class="modal" id="info-modal" aria-labelled="info-modal" aria-describedby="info-modal" aria-hidden="true">
+    <div tabindex="3" role="dialog" class="modal" id="info-modal" aria-labelled="infos" aria-describedby="info-modal" aria-hidden="true">
         <div tabindex="4" class="modal-header">
             <div tabindex="5" class="swipe-indicator"></div>
             <div tabindex="5" class="modal-title" role="text">CO Information</div>
