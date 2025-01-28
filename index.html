@@ -487,8 +487,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     <script>
         const progressBarContainer = document.getElementById('upload');
-        const progressBar = document.querySelector('.upload-progress-bar');
-        const uploadStatus = document.querySelector('.upload-status');
+        let lastTimestamp = null;  // Menyimpan timestamp terakhir
+        let currentProgressBar = null;  // Menyimpan elemen progress bar yang sedang aktif
         
         // Fungsi untuk membuat timestamp unik
         function getTimestampParameter() {
@@ -522,14 +522,30 @@
         // Fungsi untuk menghapus progress bar setelah selesai
         function removeProgressBar() {
             setTimeout(() => {
-                progressBarContainer.removeChild(progressBarContainer.querySelector('.upload-progress-container'));
+                if (currentProgressBar) {
+                    progressBarContainer.removeChild(progressBarContainer.querySelector('.upload-progress-container'));
+                    currentProgressBar = null;  // Reset progress bar yang sedang aktif
+                }
             }, 500); // Menunggu 500ms agar animasi selesai sebelum menghapus
         }
-
-        // Fungsi utama untuk fetching data
+        
+        // Fungsi untuk menghitung estimasi waktu berdasarkan timestamp
+        function calculateProgressFromTimestamp(timestamp) {
+            const now = new Date().getTime();  // Waktu saat ini
+            const diff = now - timestamp;  // Selisih waktu
+            const totalTime = 10000; // Waktu total untuk proses, misalnya 10 detik (10000 ms)
+            const progress = Math.min(100, (diff / totalTime) * 100);  // Menghitung progress berdasarkan waktu
+            return progress;
+        }
+        
+        // Fungsi untuk fetching data dan memperbarui progress bar
         async function fetchData() {
             let progress = 0;
-            const progressBar = createProgressBar();
+            if (!currentProgressBar) {
+                // Jika tidak ada progress bar, buat yang baru
+                currentProgressBar = createProgressBar();
+            }
+        
             try {
                 // Gunakan URL GitHub Pages langsung, bukan raw.githubusercontent.com
                 const url = `https://4211421036.github.io/qualityair/data.json${getTimestampParameter()}`;
@@ -543,40 +559,11 @@
                         'Expires': '0'
                     }
                 });
-                
+        
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
-                    const data = await response.json();
-                    const lastUpdate = new Date(data.commit.committer.date).toLocaleString();
                 }
-                const interval = setInterval(() => {
-                    progress += 10;  // Meningkatkan progres 10% setiap interval
-                    progressBar.style.width = `${progress}%`;
         
-                    // Mengubah warna progress bar berdasarkan persentase
-                    if (progress <= 30) {
-                        progressBar.style.backgroundColor = '#ff9800';  // Warna oranye untuk 0%-30%
-                    } else if (progress <= 60) {
-                        progressBar.style.backgroundColor = '#ffeb3b';  // Warna kuning untuk 30%-60%
-                    } else if (progress <= 90) {
-                        progressBar.style.backgroundColor = '#4caf50';  // Warna hijau untuk 60%-90%
-                    } else {
-                        progressBar.style.backgroundColor = '#1a73e8';  // Warna biru untuk 90%-100%
-                    }
-        
-                    // Perbarui status
-                    uploadStatus.textContent = `Uploading... ${progress}%`;
-        
-                    // Jika progress mencapai 100%, hentikan interval dan hapus progress bar
-                    if (progress >= 100) {
-                        clearInterval(interval);
-                        uploadStatus.textContent = 'Selesai diunggah';
-                        removeProgressBar(); // Menghapus progress bar setelah selesai
-                        setTimeout(() => {
-                            fetchData(); // Mengulang proses ketika progress mencapai 100%
-                        }, 1000); // Memberikan waktu 1 detik sebelum memulai proses baru
-                    }
-                }, 1000);  // Interval 1 detik untuk simulasi progress
                 const jsonData = await response.json();
         
                 // Periksa apakah data valid
@@ -588,38 +575,82 @@
                 const rawValue = jsonData.data.raw_value;
                 const timestamp = jsonData.timestamp;
         
-                // Update tampilan utama dengan data terbaru
-                document.getElementById('ppm-value').textContent = ppm.toFixed(1);
-                document.getElementById('raw-value').textContent = rawValue;
-                document.getElementById('air-quality-status').textContent = getAirQualityStatus(ppm);
-                document.getElementById('timestamp').textContent = formatTimestamp(timestamp);
+                // Mengecek apakah timestamp berubah
+                if (lastTimestamp !== timestamp) {
+                    // Timestamp berubah, berarti data baru
+                    lastTimestamp = timestamp;
         
-                // Update grafik jika ada
-                updateHistoryChart(timestamp, ppm, rawValue);
+                    // Perbarui tampilan status dan grafik berdasarkan data terbaru
+                    document.getElementById('ppm-value').textContent = ppm.toFixed(1);
+                    document.getElementById('raw-value').textContent = rawValue;
+                    document.getElementById('air-quality-status').textContent = getAirQualityStatus(ppm);
+                    document.getElementById('timestamp').textContent = formatTimestamp(timestamp);
         
-                // Notifikasi jika CO sudah tidak normal
-                if (ppm > 100) { // Misalnya, CO > 1000 ppm dianggap tidak normal
-                    if (Notification.permission === "granted") {
-                        new Notification('Peringatan Kualitas Udara!', {
-                            body: `Tingkat CO (ppm) sudah tidak normal: ${ppm.toFixed(1)} ppm. Harap ambil tindakan!`,
-                            icon: 'https://4211421036.github.io/qualityair/warning.png', // Anda bisa menambahkan ikon di sini
-                            tag: 'co-alert'
-                        });
+                    // Update grafik jika ada
+                    updateHistoryChart(timestamp, ppm, rawValue);
+        
+                    // Simulasikan progress secara bertahap dengan interval berdasarkan timestamp
+                    const interval = setInterval(() => {
+                        const progress = calculateProgressFromTimestamp(timestamp);
+                        currentProgressBar.style.width = `${progress}%`;
+        
+                        // Mengubah warna progress bar berdasarkan persentase
+                        if (progress <= 30) {
+                            currentProgressBar.style.backgroundColor = '#ff9800';  // Warna oranye untuk 0%-30%
+                        } else if (progress <= 60) {
+                            currentProgressBar.style.backgroundColor = '#ffeb3b';  // Warna kuning untuk 30%-60%
+                        } else if (progress <= 90) {
+                            currentProgressBar.style.backgroundColor = '#4caf50';  // Warna hijau untuk 60%-90%
+                        } else {
+                            currentProgressBar.style.backgroundColor = '#1a73e8';  // Warna biru untuk 90%-100%
+                        }
+        
+                        // Update status text
+                        document.querySelector('.upload-status').textContent = `Uploading... ${Math.round(progress)}%`;
+        
+                        // Jika progress mencapai 100%, hentikan interval dan hapus progress bar
+                        if (progress >= 100) {
+                            clearInterval(interval);
+                            document.querySelector('.upload-status').textContent = 'Selesai diunggah';
+                            removeProgressBar(); // Menghapus progress bar setelah selesai
+                            // Delay untuk proses berikutnya
+                            setTimeout(() => {
+                                fetchData(); // Mengulang proses ketika progress mencapai 100%
+                            }, 1000); // Memberikan waktu 1 detik sebelum memulai proses baru
+                        }
+        
+                    }, 1000);  // Interval 1 detik untuk simulasi progress
+        
+                    // Notifikasi jika CO sudah tidak normal
+                    if (ppm > 100) { // Misalnya, CO > 1000 ppm dianggap tidak normal
+                        if (Notification.permission === "granted") {
+                            new Notification('Peringatan Kualitas Udara!', {
+                                body: `Tingkat CO (ppm) sudah tidak normal: ${ppm.toFixed(1)} ppm. Harap ambil tindakan!`,
+                                icon: 'https://4211421036.github.io/qualityair/warning.png',
+                                tag: 'co-alert'
+                            });
+                        }
                     }
-                }
         
-                // Menambahkan animasi saat data diperbarui
-                document.getElementById('ppm-value').classList.add('update-animation');
-                setTimeout(() => {
-                    document.getElementById('ppm-value').classList.remove('update-animation');
-                }, 500);
+                    // Menambahkan animasi saat data diperbarui
+                    document.getElementById('ppm-value').classList.add('update-animation');
+                    setTimeout(() => {
+                        document.getElementById('ppm-value').classList.remove('update-animation');
+                    }, 500);
+        
+                } else {
+                    // Jika timestamp tidak berubah, tetap beri status "queued"
+                    document.querySelector('.upload-status').textContent = 'Dalam antrian...';
+                }
         
             } catch (error) {
                 console.error('Error fetching data:', error);
-                progressBar.style.width = '50%';
-                uploadStatus.textContent = 'Gagal mengambil data';
+                // Jika gagal, tampilkan status "gagal"
+                document.querySelector('.upload-status').textContent = 'Gagal mengunduh data.';
             }
         }
+        
+        // Memanggil fetchData untuk memulai
         fetchData();
 
         // Update data every 5 seconds
