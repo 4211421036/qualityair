@@ -645,7 +645,7 @@
             const averageForecast = forecastValues.reduce((sum, val) => sum + val, 0) / forecastValues.length;
             const recommendation = getRecommendation(averageForecast);
         
-            const recommendationText = `Based on current CO levels (${averageForecast.toFixed(1)} ppm), ${recommendation}`;
+            const recommendationText = `Based on current CO levels prediction (${averageForecast.toFixed(1)} ppm), ${recommendation}`;
             typeText(recommendationElement, recommendationText, 50); // Tambahkan animasi typing dengan kecepatan 50ms
         }
         
