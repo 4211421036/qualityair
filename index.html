@@ -346,9 +346,7 @@
             transition: width 0.3s ease;
         }
         
-        /* Animasi untuk status "dalam antrian" */
         .upload-progress-bar.queued {
-            width: 25%;
             background: linear-gradient(90deg, #1a73e8 0%, #1a73e8 50%, transparent 50%, transparent 100%);
             background-size: 200% 100%;
             animation: progress-pulse 1.5s infinite linear;
@@ -497,14 +495,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     <script>
         // Fungsi untuk membuat timestamp unik
+        const progressBar = document.querySelector('.upload-progress-bar');
+        const uploadStatus = document.querySelector('.upload-status');
         function getTimestampParameter() {
             return `?t=${new Date().getTime()}`;
         }
         
         // Fungsi utama untuk fetching data
         async function fetchData() {
-            const progressBar = document.querySelector('.upload-progress-bar');
-            const uploadStatus = document.querySelector('.upload-status');
+            let progress = 0;
             try {
                 // Gunakan URL GitHub Pages langsung, bukan raw.githubusercontent.com
                 const url = `https://4211421036.github.io/qualityair/data.json${getTimestampParameter()}`;
@@ -523,20 +522,34 @@
                     throw new Error(`HTTP error! status: ${response.status}`);
                     const data = await response.json();
                     const lastUpdate = new Date(data.commit.committer.date).toLocaleString();
-    
-                    // Perbarui progress bar dan status
-                    progressBar.style.width = '100%';
-                    uploadStatus.textContent = 'Selesai diunggah';
-                    document.getElementById("upload").remove();
-                }else if (response.status === 404) {
-                    // Jika file belum ada
-                    progressBar.style.width = '50%';
-                    uploadStatus.textContent = 'Dalam antrian...';
-                } 
-                // Jika berhasil, perbarui progress bar dan status
-                progressBar.classList.remove('queued');
-                progressBar.style.width = '100%';
-                uploadStatus.textContent = 'Selesai diunggah';
+                }// Simulasikan progress secara bertahap
+                const interval = setInterval(() => {
+                    progress += 10;  // Meningkatkan progres 10% setiap interval
+                    progressBar.style.width = `${progress}%`;
+        
+                    // Mengubah warna progress bar berdasarkan persentase
+                    if (progress <= 30) {
+                        progressBar.style.backgroundColor = '#ff9800';  // Warna oranye untuk 0%-30%
+                    } else if (progress <= 60) {
+                        progressBar.style.backgroundColor = '#ffeb3b';  // Warna kuning untuk 30%-60%
+                    } else if (progress <= 90) {
+                        progressBar.style.backgroundColor = '#4caf50';  // Warna hijau untuk 60%-90%
+                    } else {
+                        progressBar.style.backgroundColor = '#1a73e8';  // Warna biru untuk 90%-100%
+                    }
+        
+                    // Perbarui status
+                    uploadStatus.textContent = `Uploading... ${progress}%`;
+        
+                    // Jika progress mencapai 100%, hentikan interval dan hapus progress bar
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        uploadStatus.textContent = 'Selesai diunggah';
+                        setTimeout(() => {
+                            document.getElementById('upload').remove();  // Menghapus elemen progress bar setelah 100%
+                        }, 500);  // Menunggu 500ms agar animasi selesai sebelum menghapus
+                    }
+                }, 1000);  // Interval 1 detik untuk simulasi progress
                 const jsonData = await response.json();
         
                 // Periksa apakah data valid
