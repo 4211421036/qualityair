@@ -26,7 +26,6 @@
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <link rel="manifest" href="/qualityair/manifest.webmanifest">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="canonical" href="https://4211421036.github.io/">
     <link rel="icon" href="https://4211421036.github.io/g4lihru/987654567.png" type="image/x-icon">
     <link rel="manifest" href="/qualityair/manifest.webmanifest" crossorigin="use-credentials">
     <style>
@@ -171,6 +170,22 @@
             font-size: 1.5rem;
             font-weight: 600;
             color: var(--primary-color);
+        }
+        
+        .update-animation {
+            animation: fadeInOut 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
         }
 
         .stat-label {
@@ -784,43 +799,37 @@
             return `${hours}:${minutes}`;
         }
 
-         async function fetchData() {
+         // Fungsi untuk mengambil data setiap 5 detik
+        async function fetchData() {
             try {
                 const response = await fetch('https://raw.githubusercontent.com/4211421036/qualityair/main/data.json');
                 const jsonData = await response.json();
         
-                // Verify data structure
+                // Verifikasi struktur data
                 if (!jsonData || !jsonData.data || typeof jsonData.data.ppm === 'undefined') {
-                    throw new Error('Invalid data structure');
+                    throw new Error('Struktur data tidak valid');
                 }
         
-                // Extract values from the nested structure
+                // Ambil nilai ppm dan raw_value
                 const ppm = jsonData.data.ppm;
                 const rawValue = jsonData.data.raw_value;
                 const timestamp = jsonData.timestamp;
         
-                // Update main display
+                // Update elemen tampilan utama
                 document.getElementById('ppm-value').textContent = ppm.toFixed(1);
                 document.getElementById('raw-value').textContent = rawValue;
                 document.getElementById('air-quality-status').textContent = getAirQualityStatus(ppm);
                 document.getElementById('timestamp').textContent = formatTimestamp(timestamp);
-                document.getElementById('daily-recommendation').textContent = getRecommendation(ppm);
         
-                // Update chart
+                // Update grafik data sejarah dan prediksi
                 updateHistoryChart(timestamp, ppm, rawValue);
-        
-                // Update theme-based colors
                 updateChartColors();
+        
             } catch (error) {
-                console.error('Error fetching data:', error);
-                // Set default values when there's an error
-                document.getElementById('ppm-value').textContent = '--';
-                document.getElementById('raw-value').textContent = '--';
-                document.getElementById('air-quality-status').textContent = 'Error loading data';
-                document.getElementById('timestamp').textContent = '--';
-                document.getElementById('daily-recommendation').textContent = 'Unable to provide recommendations at this time';
+                console.error('Terjadi kesalahan saat mengambil data:', error);
             }
         }
+        
         function updateChartColors() {
             const textColor = getComputedStyle(document.documentElement)
                 .getPropertyValue('--text-primary');
@@ -848,7 +857,7 @@
         fetchData();
 
         // Update data every 5 seconds
-        setInterval(fetchData, 5000);
+        setInterval(fetchData, 1000);
 
         // Update greeting every minute
         setInterval(updateGreeting, 60000);
