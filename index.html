@@ -345,7 +345,7 @@
     <div class="app-container">
         <div class="header">
             <div>
-                <div class="greeting" id="greeting" aria-labelled="greeting">>Good Morning</div>
+                <div class="greeting" id="greeting" aria-labelled="greeting" aria-hidden="true">Good Morning</div>
                 <div class="date" id="current-date"></div>
             </div>
             <button type="button" name="theme" class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme" aria-label="theme-toggle">
@@ -356,19 +356,19 @@
         <div class="main-card">
             <div class="aqi-display">
                 <div class="aqi-circle">
-                    <div class="aqi-number" id="ppm-value" aria-labelled="ppm-value">--</div>
+                    <div class="aqi-number" id="ppm-value" aria-labelled="ppm-value" aria-hidden="true">--</div>
                     <div class="aqi-label">CO PPM</div>
                 </div>
-                <div class="aqi-status" id="air-quality-status" aria-labelled="air-quality-status">Calculating...</div>
+                <div class="aqi-status" id="air-quality-status" aria-labelled="air-quality-status" aria-hidden="true">Calculating...</div>
             </div>
 
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-value" id="raw-value" aria-labelled="raw-value">--</div>
+                    <div class="stat-value" id="raw-value" aria-labelled="raw-value" aria-hidden="true">--</div>
                     <div class="stat-label">Raw Value</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value" id="timestamp" aria-labelled="timestamp">--</div>
+                    <div class="stat-value" id="timestamp" aria-labelled="timestamp" aria-hidden="true">--</div>
                     <div class="stat-label">Last Updated</div>
                 </div>
             </div>
@@ -395,27 +395,27 @@
     </div>
 
     <!-- History Modal -->
-    <div class="modal" id="history-modal" aria-labelled="history-modal">
+    <div class="modal" id="history-modal" aria-labelled="history-modal" aria-hidden="true">
         <div class="modal-header">
             <div class="swipe-indicator"></div>
             <div class="modal-title">CO Level History</div>
         </div>
         <div class="modal-content">
             <div class="chart-container">
-                <canvas id="historyChart" aria-labelled="historyChart"></canvas>
+                <canvas id="historyChart" aria-labelled="historyChart" aria-hidden="true"></canvas>
             </div>
         </div>
     </div>
 
     <!-- Forecast Modal -->
-    <div class="modal" id="forecast-modal" aria-labelled="forecast-modal">
+    <div class="modal" id="forecast-modal" aria-labelled="forecast-modal" aria-hidden="true">
         <div class="modal-header">
             <div class="swipe-indicator"></div>
             <div class="modal-title">Air Quality Forecast</div>
         </div>
         <div class="modal-content">
             <div class="chart-container">
-                <canvas id="forecastChart" aria-labelled="forecastChart"></canvas>
+                <canvas id="forecastChart" aria-labelled="forecastChart" aria-hidden="true"></canvas>
             </div>
             <div class="recommendations">
                 <div class="recommendation-item">
@@ -429,7 +429,7 @@
     </div>
 
     <!-- Info Modal -->
-    <div class="modal" id="info-modal" aria-labelled="forecast-modal">
+    <div class="modal" id="info-modal" aria-labelled="forecast-modal" aria-hidden="true">
         <div class="modal-header">
             <div class="swipe-indicator"></div>
             <div class="modal-title">CO Information</div>
