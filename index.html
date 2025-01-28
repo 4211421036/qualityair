@@ -799,34 +799,69 @@
             return `${hours}:${minutes}`;
         }
 
-         // Fungsi untuk mengambil data setiap 5 detik
+         // Meminta izin untuk menampilkan notifikasi
+        if (Notification.permission !== "granted") {
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    console.log('Permission granted for notifications');
+                }
+            });
+        }
+        
         async function fetchData() {
             try {
-                const response = await fetch('https://4211421036.github.io/qualityair/data.json');
+                // Ambil data dari URL atau API
+                const response = await fetch('https://raw.githubusercontent.com/4211421036/qualityair/main/data.json');
                 const jsonData = await response.json();
         
-                // Verifikasi struktur data
+                // Periksa apakah data valid
                 if (!jsonData || !jsonData.data || typeof jsonData.data.ppm === 'undefined') {
-                    throw new Error('Struktur data tidak valid');
+                    throw new Error('Invalid data structure');
                 }
         
-                // Ambil nilai ppm dan raw_value
                 const ppm = jsonData.data.ppm;
                 const rawValue = jsonData.data.raw_value;
                 const timestamp = jsonData.timestamp;
         
-                // Update elemen tampilan utama
+                // Update tampilan utama dengan data terbaru
                 document.getElementById('ppm-value').textContent = ppm.toFixed(1);
                 document.getElementById('raw-value').textContent = rawValue;
                 document.getElementById('air-quality-status').textContent = getAirQualityStatus(ppm);
                 document.getElementById('timestamp').textContent = formatTimestamp(timestamp);
         
-                // Update grafik data sejarah dan prediksi
+                // Update grafik jika ada
                 updateHistoryChart(timestamp, ppm, rawValue);
-                updateChartColors();
+        
+                // Notifikasi jika CO sudah tidak normal
+                if (ppm > 100) { // Misalnya, CO > 1000 ppm dianggap tidak normal
+                    if (Notification.permission === "granted") {
+                        new Notification('Peringatan Kualitas Udara!', {
+                            body: `Tingkat CO (ppm) sudah tidak normal: ${ppm.toFixed(1)} ppm. Harap ambil tindakan!`,
+                            icon: 'https://4211421036.github.io/qualityair/warning.png', // Anda bisa menambahkan ikon di sini
+                            tag: 'co-alert'
+                        });
+                    }
+                }
+        
+                // Menambahkan animasi saat data diperbarui
+                document.getElementById('ppm-value').classList.add('update-animation');
+                setTimeout(() => {
+                    document.getElementById('ppm-value').classList.remove('update-animation');
+                }, 500);
         
             } catch (error) {
-                console.error('Terjadi kesalahan saat mengambil data:', error);
+                console.error('Error fetching data:', error);
+            }
+        }
+        
+        // Fungsi untuk mendapatkan status kualitas udara berdasarkan ppm
+        function getAirQualityStatus(ppm) {
+            if (ppm > 1000) {
+                return 'Tidak Normal';
+            } else if (ppm > 500) {
+                return 'Waspada';
+            } else {
+                return 'Normal';
             }
         }
         
