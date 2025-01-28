@@ -601,6 +601,38 @@
             });
         });
 
+        // Fungsi untuk memberikan rekomendasi berdasarkan nilai CO
+        function getRecommendation(ppm) {
+            if (ppm <= 50) {
+                return "the air quality is good. It's safe to go outside.";
+            } else if (ppm <= 100) {
+                return "the air quality is moderate. Sensitive individuals should limit outdoor activities.";
+            } else if (ppm <= 150) {
+                return "the air quality is unhealthy for sensitive groups. Consider wearing a mask if outside.";
+            } else if (ppm <= 200) {
+                return "the air quality is unhealthy. Avoid outdoor activities if possible.";
+            } else if (ppm <= 300) {
+                return "the air quality is very unhealthy. Stay indoors and limit physical activities.";
+            } else {
+                return "the air quality is hazardous. Remain indoors and use air purifiers if available.";
+            }
+        }
+        
+        // Fungsi untuk memperbarui elemen rekomendasi berdasarkan forecast prediction
+        function updateRecommendation(forecastValues) {
+            if (!forecastValues || forecastValues.length === 0) {
+                document.getElementById("daily-recommendation").textContent = 
+                    "Unable to fetch forecast data. Please try again later.";
+                return;
+            }
+        
+            const averageForecast = forecastValues.reduce((sum, val) => sum + val, 0) / forecastValues.length;
+            const recommendation = getRecommendation(averageForecast);
+        
+            document.getElementById("daily-recommendation").textContent = 
+                `Based on current CO levels (${averageForecast.toFixed(1)} ppm), ${recommendation}`;
+        }
+
         // Data handling
         const historicalData = {
             times: [],
@@ -828,6 +860,7 @@
             forecastChart.data.datasets[1].data = [...Array(6).fill(null), ...historicalData.forecastValues];
             
             forecastChart.update();
+            updateRecommendation(forecastChart.data.datasets[0].data);
         }
 
         // Tambahkan di fungsi updateChartColors:
