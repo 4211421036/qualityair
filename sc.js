@@ -90,7 +90,7 @@ async function generateHtml() {
       <link rel="canonical" href="https://4211421036.github.io/" />
       <meta property="og:locale" content="id_ID" />
       <meta property="og:title" content="Air Quality Index">
-      <meta property="og:description" content="Monitor the air quality index and CO levels in realtime.">
+      <meta property="og:description" content="Monitor the air quality index and CO levels in real-time.">
       <meta property="og:type" content="website">
       <meta property="og:url" content="https://4211421036.github.io">
       <meta property="og:image" content="https://4211421036.github.io/image.jpg">
@@ -114,7 +114,6 @@ async function generateHtml() {
           )
           .join('\n')}`;
 
-  // Mengelola hashed JS files
   hashedJsFiles.forEach((file) => {
     const filePath = path.join(process.cwd(), file); // Lokasi file asli
     const hashedFileName = generateHashedFileName(filePath);
