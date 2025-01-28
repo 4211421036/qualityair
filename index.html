@@ -331,7 +331,7 @@
 </head>
 
 <body>
-    <div tabindex="0" id="splash-screen" class="splash-screen" aria-labelled="splash-screen">
+    <div tabindex="0" id="splash-screen" class="splash-screen" aria-labelled="splash-screen" role="banner">
         <img class="logos" src="https://4211421036.github.io/g4lihru/987654567.png" alt="Logo" aria-label="logo">
     </div>
     <script>
@@ -346,16 +346,16 @@
         <div role="navigation" class="header">
             <div>
                 <div role="text" class="greeting" id="greeting" aria-labelled="greeting" aria-hidden="true">Good Morning</div>
-                <div role="text" class="date" id="current-date"></div>
+                <div role="text" class="date" id="current-date" aria-label="Current Date"></div>
             </div>
             <button role="button" tabindex="-1" type="button" name="theme" class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme" aria-label="theme-toggle">
                 <i class="fas fa-moon"></i>
             </button>
         </div>
 
-        <div class="main-card" tabindex="0">
+        <div class="main-card" tabindex="0" role="main">
             <div class="aqi-display">
-                <div role="group" class="aqi-circle">
+                <div role="group" class="aqi-circle" role="region" aria-label="Air Quality Measurements">
                     <div role="treeitem" class="aqi-number" id="ppm-value" aria-labelled="ppm-value" aria-hidden="true">--</div>
                     <div role="treeitem" class="aqi-label">CO PPM</div>
                 </div>
@@ -363,14 +363,14 @@
                 <p id="air-status" role="tooltip">Status CO</p>
             </div>
 
-            <div class="stats-grid" tabindex="0">
+            <div class="stats-grid" tabindex="0" role="region" aria-label="Additional Statistics">
                 <div class="stat-card">
-                    <div role="text" tabindex="2" role="text" class="stat-value" id="raw-value" aria-labelled="raw-value" aria-hidden="true">--</div>
+                    <div role="text" tabindex="2" class="stat-value" id="raw-value" aria-labelled="raw-value" aria-hidden="true" aria-label="Last Update Time">--</div>
                     <div role="text" role="text" class="stat-label">Raw Value</div>
                 </div>
                 <div class="stat-card">
                     <div role="treeitem" tabindex="2" role="text" class="stat-value" id="timestamp" aria-labelled="timestamp" aria-hidden="true">--</div>
-                    <div role="text" role="text" class="stat-label">Last Updated</div>
+                    <div role="text" role="text" class="stat-label" aria-label="Last Update Time">Last Updated</div>
                 </div>
             </div>
         </div>
@@ -396,7 +396,7 @@
     </div>
 
     <!-- History Modal -->
-    <div tabindex="1" role="dialog" class="modal" id="history-modal" aria-labelled="history-modal-title" aria-describedby="history-modal" aria-hidden="true">
+    <div tabindex="1" role="dialog" class="modal" aria-modal="true" id="history-modal" aria-labelled="history-modal-title" aria-describedby="history-modal" aria-hidden="true">
         <div id="history-modal-title" role="gruop" tabindex="2" class="modal-header">
             <div role="treeitem" tabindex="3" class="swipe-indicator"></div>
             <div role="treeitem" tabindex="3" class="modal-title" role="text">CO Level History</div>
@@ -409,7 +409,7 @@
     </div>
 
     <!-- Forecast Modal -->
-    <div tabindex="2" role="dialog" class="modal" id="forecast-modal" aria-labelled="forecast-modal-title" aria-describedby="forecast-modal" aria-hidden="true">
+    <div tabindex="2" role="dialog" class="modal" aria-modal="true"  id="forecast-modal" aria-labelled="forecast-modal-title" aria-describedby="forecast-modal" aria-hidden="true">
         <div id="forecast-modal-title" role="gruop" tabindex="3" class="modal-header">
             <div role="treeitem" tabindex="4" class="swipe-indicator"></div>
             <div role="treeitem" tabindex="4" class="modal-title" role="text">Air Quality Forecast</div>
@@ -430,7 +430,7 @@
     </div>
 
     <!-- Info Modal -->
-    <div tabindex="3" role="dialog" class="modal" id="info-modal" aria-labelledby="info-modal-title" aria-describedby="info-modal" aria-hidden="true">
+    <div tabindex="3" role="dialog" class="modal" aria-modal="true" id="info-modal" aria-labelledby="info-modal-title" aria-describedby="info-modal" aria-hidden="true">
         <div id="info-modal-title" tabindex="4" class="modal-header">
             <div tabindex="5" class="swipe-indicator"></div>
             <div tabindex="5" class="modal-title" role="text">CO Information</div>
