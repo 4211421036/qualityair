@@ -638,34 +638,30 @@
             });
         }
         
+        // Variabel global untuk menyimpan nilai prediksi terakhir
+        let lastForecast = null;
+        
         // Fungsi untuk memperbarui elemen rekomendasi berdasarkan forecast prediction
         async function updateRecommendation(forecastValues) {
             const recommendationElement = document.getElementById("daily-recommendation");
         
-            // Cegah pengulangan atau reset animasi jika sudah selesai
-            if (recommendationElement.getAttribute("data-typing") === "true") {
-                return;
-            }
-        
-            // Tandai animasi sedang berlangsung
-            recommendationElement.setAttribute("data-typing", "true");
-        
-            if (!forecastValues || forecastValues.length === 0) {
-                await typeText(recommendationElement, "Unable to fetch forecast data. Please try again later.", 50);
-                recommendationElement.setAttribute("data-typing", "false"); // Animasi selesai
-                return;
-            }
-        
+            // Hitung rata-rata prediksi
             const averageForecast = forecastValues.reduce((sum, val) => sum + val, 0) / forecastValues.length;
-            const recommendation = getRecommendation(averageForecast);
         
+            // Jika nilai prediksi sama dengan yang terakhir, jangan lakukan apa-apa
+            if (lastForecast !== null && averageForecast === lastForecast) {
+                return; // Tidak ada pembaruan
+            }
+        
+            // Perbarui nilai prediksi terakhir
+            lastForecast = averageForecast;
+        
+            // Dapatkan rekomendasi berdasarkan prediksi
+            const recommendation = getRecommendation(averageForecast);
             const recommendationText = `Based on current CO levels prediction (${averageForecast.toFixed(1)} ppm), ${recommendation}`;
         
             // Tampilkan teks hingga selesai
             await typeText(recommendationElement, recommendationText, 50);
-        
-            // Tandai animasi selesai
-            recommendationElement.setAttribute("data-typing", "false");
         }
         
         // Data handling
