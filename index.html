@@ -515,8 +515,7 @@
                     headers: {
                         'Cache-Control': 'no-cache, no-store, must-revalidate',
                         'Pragma': 'no-cache',
-                        'Expires': '0',
-                        'Accept': 'application/vnd.github.v3+json'
+                        'Expires': '0'
                     }
                 });
                 
@@ -529,14 +528,11 @@
                     progressBar.style.width = '100%';
                     uploadStatus.textContent = 'Selesai diunggah';
                     document.getElementById("upload").remove();
-                    rawValue.textContent = lastUpdate;
                 }else if (response.status === 404) {
                     // Jika file belum ada
                     progressBar.style.width = '50%';
                     uploadStatus.textContent = 'Dalam antrian...';
-                } else {
-                    throw new Error('Error saat memeriksa status file.');
-                }
+                } 
                 
                 const jsonData = await response.json();
         
