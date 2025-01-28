@@ -400,17 +400,17 @@
             <div class="stats-grid" tabindex="0" role="region" aria-label="Additional Statistics">
                 <div class="stat-card">
                     <div role="text" tabindex="2" class="stat-value" id="raw-value" aria-labelled="raw-value" aria-hidden="true" aria-label="Last Update Time">--</div>
-                    <div class="upload-progress-container" role="progressbar" 
+                    <div role="text" role="text" class="stat-label">Raw Value</div>
+                </div>
+                <div class="stat-card">
+                    <div id="upload" class="upload-progress-container" role="progressbar" 
                          aria-label="Status upload data ke GitHub" 
                          aria-valuenow="0" 
                          aria-valuemin="0" 
                          aria-valuemax="100">
                         <div class="upload-progress-bar"></div>
+                        <div class="upload-status" aria-live="polite">Dalam antrian...</div>
                     </div>
-                    <div class="upload-status" aria-live="polite">Dalam antrian...</div>
-                    <div role="text" role="text" class="stat-label">Raw Value</div>
-                </div>
-                <div class="stat-card">
                     <div role="treeitem" tabindex="2" role="text" class="stat-value" id="timestamp" aria-labelled="timestamp" aria-hidden="true">--</div>
                     <div role="text" role="text" class="stat-label" aria-label="Last Update Time">Last Updated</div>
                 </div>
@@ -526,6 +526,7 @@
                     // Perbarui progress bar dan status
                     progressBar.style.width = '100%';
                     uploadStatus.textContent = 'Selesai diunggah';
+                    document.getElementById("upload").remove();
                     rawValue.textContent = lastUpdate;
                 }else if (response.status === 404) {
                     // Jika file belum ada
