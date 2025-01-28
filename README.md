@@ -112,13 +112,7 @@ The data stored in the repository is in JSON format and follows this structure:
 
 This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
 
-## 9. Acknowledgments
-
-- Special thanks to the [ESP32 community](https://github.com/espressif/arduino-esp32) for extensive documentation and support.
-- Thanks to [ArduinoJson](https://github.com/bblanchon/ArduinoJson) for handling JSON data easily in Arduino projects.
-- Thanks to [Base64](https://github.com/harlanhaskins/base64) for providing a lightweight Base64 encoding library for Arduino.
-
-## 10. Contact
+## 9. Contact
 
 For any questions or suggestions, feel free to open an issue on the [GitHub Repository](https://github.com/4211421036/qualityair).
 
