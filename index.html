@@ -785,28 +785,44 @@
             return `${hours}:${minutes}`;
         }
 
-        async function fetchData() {
+         async function fetchData() {
             try {
                 const response = await fetch('https://raw.githubusercontent.com/4211421036/qualityair/main/data.json');
                 const data = await response.json();
-
-                // Update main display
-                document.getElementById('ppm-value').textContent = data.data.ppm.toFixed(1);
-                document.getElementById('raw-value').textContent = data.data.raw_value;
-                document.getElementById('air-quality-status').textContent = getAirQualityStatus(data.data.ppm);
-                document.getElementById('timestamp').textContent = formatTimestamp(data.timestamp);
-                document.getElementById('daily-recommendation').textContent = getRecommendation(data.data.ppm);
-
+    
+                // Add error checking and data validation
+                if (!data) {
+                    throw new Error('No data received');
+                }
+    
+                // Assuming your ESP32 sends data in this format:
+                // { "timestamp": "2024-01-28T12:00:00", "co_ppm": 123.45, "raw_value": 456 }
+                // Adjust these values according to your actual JSON structure
+                const ppm = data.co_ppm || 0;
+                const rawValue = data.raw_value || 0;
+                const timestamp = data.timestamp || new Date().toISOString();
+    
+                // Update main display with fallback values if data is undefined
+                document.getElementById('ppm-value').textContent = ppm.toFixed(1);
+                document.getElementById('raw-value').textContent = rawValue;
+                document.getElementById('air-quality-status').textContent = getAirQualityStatus(ppm);
+                document.getElementById('timestamp').textContent = formatTimestamp(timestamp);
+                document.getElementById('daily-recommendation').textContent = getRecommendation(ppm);
+    
                 // Update chart
-                updateHistoryChart(data.timestamp, data.data.ppm, data.data.raw_value);
-
+                updateHistoryChart(timestamp, ppm, rawValue);
+    
                 // Update theme-based colors
                 updateChartColors();
             } catch (error) {
                 console.error('Error fetching data:', error);
+                // Add user-friendly error handling
+                document.getElementById('ppm-value').textContent = '--';
+                document.getElementById('raw-value').textContent = '--';
+                document.getElementById('air-quality-status').textContent = 'Error loading data';
+                document.getElementById('timestamp').textContent = '--';
             }
         }
-
         function updateChartColors() {
             const textColor = getComputedStyle(document.documentElement)
                 .getPropertyValue('--text-primary');
