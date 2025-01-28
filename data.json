@@ -1,7 +1,7 @@
 {
-  "timestamp": "2025-01-29 01:13:30",
+  "timestamp": "Failed to obtain time",
   "data": {
-    "ppm": 47.40958,
-    "raw_value": 485
+    "ppm": 45.35679,
+    "raw_value": 464
   }
 }
