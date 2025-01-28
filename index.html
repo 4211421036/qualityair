@@ -574,11 +574,9 @@
         
             } catch (error) {
                 console.error('Error fetching data:', error);
-                uploadStatus.textContent = 'Gagal memperbarui status';
             }
         }
         fetchData();
-        updateProgress();
 
         // Update data every 5 seconds
         setInterval(fetchData, 1000);
