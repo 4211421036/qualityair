@@ -496,8 +496,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     <script>
-        const uploadStatus = document.getElementById('upload-status');
-        const rawValue = document.getElementById('raw-value');
         // Fungsi untuk membuat timestamp unik
         function getTimestampParameter() {
             return `?t=${new Date().getTime()}`;
@@ -505,6 +503,8 @@
         
         // Fungsi utama untuk fetching data
         async function fetchData() {
+            const progressBar = document.querySelector('.upload-progress-bar');
+            const uploadStatus = document.querySelector('.upload-status');
             try {
                 // Gunakan URL GitHub Pages langsung, bukan raw.githubusercontent.com
                 const url = `https://4211421036.github.io/qualityair/data.json${getTimestampParameter()}`;
@@ -533,7 +533,10 @@
                     progressBar.style.width = '50%';
                     uploadStatus.textContent = 'Dalam antrian...';
                 } 
-                
+                // Jika berhasil, perbarui progress bar dan status
+                progressBar.classList.remove('queued');
+                progressBar.style.width = '100%';
+                uploadStatus.textContent = 'Selesai diunggah';
                 const jsonData = await response.json();
         
                 // Periksa apakah data valid
@@ -573,6 +576,8 @@
         
             } catch (error) {
                 console.error('Error fetching data:', error);
+                progressBar.style.width = '50%';
+                uploadStatus.textContent = 'Gagal mengambil data';
             }
         }
         fetchData();
