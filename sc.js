@@ -49,7 +49,7 @@ async function generateHtml() {
     return generateHashedFileName(originalPath); // Nama hash file, tidak perlu membuat salinan
   });
 
-  const cssFiles = ['style.css', 'min.all.css'];
+  const cssFiles = ['style.css', 'all.min.css'];
   const hashedCssFiles = cssFiles.map((file) => {
     const filePath = path.join(process.cwd(), file); // Asumsi file berada di direktori kerja
     return generateHashedFileName(filePath);
