@@ -618,11 +618,28 @@
             }
         }
         
+        // Fungsi untuk memberikan rekomendasi berdasarkan nilai CO
+        function getRecommendation(ppm) {
+            if (ppm <= 50) {
+                return "the air quality is good. It's safe to go outside.";
+            } else if (ppm <= 100) {
+                return "the air quality is moderate. Sensitive individuals should limit outdoor activities.";
+            } else if (ppm <= 150) {
+                return "the air quality is unhealthy for sensitive groups. Consider wearing a mask if outside.";
+            } else if (ppm <= 200) {
+                return "the air quality is unhealthy. Avoid outdoor activities if possible.";
+            } else if (ppm <= 300) {
+                return "the air quality is very unhealthy. Stay indoors and limit physical activities.";
+            } else {
+                return "the air quality is hazardous. Remain indoors and use air purifiers if available.";
+            }
+        }
+        
         // Fungsi untuk menampilkan teks dengan animasi typing effect
         function typeText(element, text, speed = 50) {
             return new Promise((resolve) => {
-                let index = 0;
                 element.textContent = ""; // Kosongkan teks sebelumnya
+                let index = 0;
         
                 function type() {
                     if (index < text.length) {
@@ -640,6 +657,7 @@
         
         // Variabel global untuk menyimpan nilai prediksi terakhir
         let lastForecast = null;
+        let isTyping = false; // Menandai apakah sedang dalam proses mengetik
         
         // Fungsi untuk memperbarui elemen rekomendasi berdasarkan forecast prediction
         async function updateRecommendation(forecastValues) {
@@ -648,13 +666,14 @@
             // Hitung rata-rata prediksi
             const averageForecast = forecastValues.reduce((sum, val) => sum + val, 0) / forecastValues.length;
         
-            // Jika nilai prediksi sama dengan yang terakhir, jangan lakukan apa-apa
+            // Jika nilai prediksi sama dengan yang terakhir atau sedang mengetik, jangan lakukan apa-apa
             if (lastForecast !== null && averageForecast === lastForecast) {
                 return; // Tidak ada pembaruan
             }
         
-            // Perbarui nilai prediksi terakhir
+            // Tandai sedang mengetik dan perbarui nilai prediksi terakhir
             lastForecast = averageForecast;
+            isTyping = true;
         
             // Dapatkan rekomendasi berdasarkan prediksi
             const recommendation = getRecommendation(averageForecast);
@@ -662,6 +681,9 @@
         
             // Tampilkan teks hingga selesai
             await typeText(recommendationElement, recommendationText, 50);
+        
+            // Tandai proses mengetik selesai
+            isTyping = false;
         }
         
         // Data handling
