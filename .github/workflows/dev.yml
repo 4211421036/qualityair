@@ -1,0 +1,60 @@
+name: Auto Refresh Data
+
+on:
+  push:
+    paths:
+      - 'data.json'
+  schedule:
+    - cron: '*/5 * * * *'  # Runs every 5 minutes
+  workflow_dispatch:  # Enables manual trigger
+
+jobs:
+  refresh-data:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Set up Git
+        run: |
+          git config user.name "GitHub Action"
+          git config user.email "action@github.com"
+
+      - name: Check and refresh data
+        run: |
+          # Get current timestamp
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          
+          # Read current data.json
+          if [ -f data.json ]; then
+            echo "Found existing data.json"
+            # Add cache busting header
+            sed -i '1i\{"last_refresh": "'$TIMESTAMP'",\' data.json
+            sed -i '2i\ "cache_buster": "'$(date +%s)'",' data.json
+          fi
+
+      - name: Commit and push if changed
+        run: |
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git add data.json
+            git commit -m "Auto refresh data.json - $(date -u)"
+            git push
+          else
+            echo "No changes to commit"
+          fi
+
+      - name: Purge GitHub cache
+        run: |
+          curl -X PURGE https://raw.githubusercontent.com/4211421036/qualityair/main/data.json
+          
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .
+          force_orphan: true
+          cname: qualityair.github.io  # Sesuaikan dengan domain Anda
