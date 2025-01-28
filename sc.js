@@ -12,7 +12,7 @@ function generateHashedFileName(filePath) {
   const fileBuffer = fs.readFileSync(filePath);
   hash.update(fileBuffer);
   const fileHash = hash.digest('hex').slice(0, 8);
-  const extname = path.extname(filePath); // Menyimpan ekstensi file (misalnya .js)
+  const extname = path.extname(filePath);
   const newFileName = `${fileHash}${extname}`;
   const newFilePath = path.join(process.cwd(), newFileName);
 
@@ -90,7 +90,7 @@ async function generateHtml() {
       <link rel="canonical" href="https://4211421036.github.io/" />
       <meta property="og:locale" content="id_ID" />
       <meta property="og:title" content="Air Quality Index">
-      <meta property="og:description" content="Monitor the air quality index and CO levels in real-time.">
+      <meta property="og:description" content="Monitor the air quality index and CO levels in realtime.">
       <meta property="og:type" content="website">
       <meta property="og:url" content="https://4211421036.github.io">
       <meta property="og:image" content="https://4211421036.github.io/image.jpg">
