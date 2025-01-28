@@ -569,28 +569,27 @@
         // Fungsi untuk memprediksi nilai CO berikutnya
         function predictNextValues(values, periods = 6) {
             if (values.length < 2) return Array(periods).fill(values[0] || 0);
-
-            // Hitung rata-rata perubahan
+        
+            // Calculate average change between consecutive values
             let changes = [];
             for (let i = 1; i < values.length; i++) {
                 changes.push(values[i] - values[i - 1]);
             }
             const avgChange = changes.reduce((a, b) => a + b, 0) / changes.length;
-
-            // Generate prediksi
+        
+            // Generate predictions based on the average change
             const predictions = [];
             let lastValue = values[values.length - 1];
-
+        
             for (let i = 0; i < periods; i++) {
                 lastValue += avgChange;
-                // Tambahkan sedikit random noise untuk variasi
-                const noise = (Math.random() - 0.5) * Math.abs(avgChange);
+                // Optional: Add a smaller random noise for variation
+                const noise = (Math.random() - 0.5) * 0.5 * Math.abs(avgChange);  // Adjust noise scaling
                 predictions.push(Math.max(0, lastValue + noise));
             }
-
+        
             return predictions;
         }
-
         // Update fungsi updateHistoryChart menjadi:
         function updateHistoryChart(timestamp, ppm, rawValue) {
             // Keep last 24 readings
