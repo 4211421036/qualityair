@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "crypto": "^1.0.1",
+    "clean-css": "^5.2.4",
     "html-minifier": "^4.0.0",
     "terser": "^5.37.0"
   },
