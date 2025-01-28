@@ -343,8 +343,8 @@
         });
     </script>
     <div tabindex="0" class="app-container">
-        <div role="tree" tabindex="1" class="header">
-            <div role="treeitem" tabindex="2">
+        <div role="tree" class="header">
+            <div role="treeitem">
                 <div role="text" class="greeting" id="greeting" aria-labelled="greeting" aria-hidden="true">Good Morning</div>
                 <div role="text" class="date" id="current-date"></div>
             </div>
@@ -354,8 +354,8 @@
         </div>
 
         <div role="tree" class="main-card" tabindex="0">
-            <div role="treeitem" class="aqi-display" tabindex="1">
-                <div role="group" class="aqi-circle" tabindex="2">
+            <div role="treeitem" class="aqi-display">
+                <div role="group" class="aqi-circle">
                     <div role="treeitem" class="aqi-number" id="ppm-value" aria-labelled="ppm-value" aria-hidden="true">--</div>
                     <div role="treeitem" class="aqi-label">CO PPM</div>
                 </div>
@@ -364,13 +364,13 @@
             </div>
 
             <div role="treeitem" class="stats-grid" tabindex="0">
-                <div role="gruop" class="stat-card" tabindex="1">
+                <div role="gruop" class="stat-card">
                     <div role="treeitem" tabindex="2" role="text" class="stat-value" id="raw-value" aria-labelled="raw-value" aria-hidden="true">--</div>
-                    <div role="treeitem" tabindex="2" role="text" class="stat-label">Raw Value</div>
+                    <div role="treeitem" role="text" class="stat-label">Raw Value</div>
                 </div>
-                <div role="gruop" tabindex="1" class="stat-card">
+                <div role="gruop" class="stat-card">
                     <div role="treeitem" tabindex="2" role="text" class="stat-value" id="timestamp" aria-labelled="timestamp" aria-hidden="true">--</div>
-                    <div role="treeitem" tabindex="2" role="text" class="stat-label">Last Updated</div>
+                    <div role="treeitem" role="text" class="stat-label">Last Updated</div>
                 </div>
             </div>
         </div>
