@@ -3,6 +3,8 @@
   "name": "CO Monitoring Realtime",
   "short_name": "CO Monitoring Realtime",
   "description": "CO Monitoring Realtime berbasis IoT menggunakan ESP32",
+  "background_color": "#FFFFFF",
+  "theme_color": "#1877F2",
   "icons": [
     {
       "src": "192x192.png",
