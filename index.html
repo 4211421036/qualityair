@@ -410,6 +410,12 @@
             0% { background-position: 100% 0; }
             100% { background-position: -100% 0; }
         }
+        .logosa {
+            width: 70px; 
+            height: 70px; 
+            background: white; 
+            border-radius: 15px;
+        }
         
     </style>
 </head>
@@ -428,8 +434,8 @@
     </script>
     <div tabindex="0" class="app-container">
         <div role="navigation" class="header">
-            <div role="image" class="logos">
-                <img role="presentation" class="logos" src="https://4211421036.github.io/g4lihru/image.jpg" alt="Logo Application">
+            <div>
+                <img role="presentation" class="logosa" src="https://4211421036.github.io/qualityair/image.jpg" alt="Logo Application">
             </div>
             <div>
                 <div role="text" class="greeting" id="greeting" aria-labelled="greeting" aria-hidden="true">Good Morning</div>
@@ -456,7 +462,7 @@
                     <div role="text" role="text" class="stat-label">Raw Value</div>
                 </div>
                 <div class="stat-card">
-                    <div aria-owns="upload" id="upload" aria-labelled="upload"></div>
+                    <div id="upload" aria-labelled="upload"></div>
                     <div role="treeitem" tabindex="2" role="text" class="stat-value" id="timestamp" aria-labelled="timestamp" aria-hidden="true">--</div>
                     <div role="text" class="stat-label" aria-label="Last Update Time">Last Updated</div>
                 </div>
