@@ -319,6 +319,7 @@
             height: 150px; 
             background: white; 
             border-radius: 25px;
+            animation: morphTransition 2s forwards;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -415,7 +416,46 @@
             height: 70px; 
             background: white; 
             border-radius: 15px;
+            animation: morphTransition 2s forwards;
         }
+
+        @keyframes morphTransition {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            45% {
+                opacity: 0.5;
+                transform: scale(1.2);
+            }
+            50% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            55% {
+                opacity: 0.5;
+                transform: scale(1.2);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .splash-screen.fade-out {
+            animation: fadeOut 0.5s forwards;
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
         
     </style>
 </head>
@@ -426,17 +466,25 @@
     </div>
     <script>
         // Hide splash screen after 3 seconds
-        window.addEventListener('load', () => {
+        const splashScreen = document.getElementById('splash-screen');
+        const logos = document.querySelector('.logos');
+        const logosa = document.querySelector('.logosa');
+            
+            // Start morph animation
             setTimeout(() => {
-                document.getElementById('splash-screen').style.display = 'none';
-            }, 500);
+                logos.style.opacity = '0';
+                logosa.style.opacity = '1';
+            }, 1000);
+
+            // Hide splash screen after animation
+            setTimeout(() => {
+                splashScreen.classList.add('fade-out');
+            }, 2500);
         });
     </script>
     <div tabindex="0" class="app-container">
         <div role="navigation" class="header">
-            <div>
-                <img role="presentation" class="logosa" src="https://4211421036.github.io/qualityair/image.jpg" alt="Logo Application">
-            </div>
+            <img role="presentation" class="logosa" src="https://4211421036.github.io/qualityair/image.jpg" alt="Logo Application">
             <div>
                 <div role="text" class="greeting" id="greeting" aria-labelled="greeting" aria-hidden="true">Good Morning</div>
                 <div role="text" class="date" id="current-date" aria-label="Current Date"></div>
