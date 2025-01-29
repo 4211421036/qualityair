@@ -319,7 +319,13 @@
             height: 150px; 
             background: white; 
             border-radius: 25px;
-            animation: morphTransition 2s forwards;
+        }
+
+        .logos.morph-to-header {
+            width: 50px; /* atau sesuaikan dengan ukuran logo di header */
+            top: 20px; /* sesuaikan dengan posisi header */
+            left: 20px;
+            transform: translate(0, 0);
         }
 
         @media (prefers-color-scheme: dark) {
@@ -412,79 +418,52 @@
             100% { background-position: -100% 0; }
         }
         .logosa {
-            width: 70px; 
-            height: 70px; 
-            background: white; 
-            border-radius: 15px;
-            animation: morphTransition 2s forwards;
+            width: 50px; /* sesuaikan ukuran */
+            height: auto;
+            opacity: 0;
+            transition: opacity 0.3s;
         }
 
-        @keyframes morphTransition {
-            0% {
-                opacity: 1;
-                transform: scale(1);
-            }
-            45% {
-                opacity: 0.5;
-                transform: scale(1.2);
-            }
-            50% {
-                opacity: 0;
-                transform: scale(0.8);
-            }
-            55% {
-                opacity: 0.5;
-                transform: scale(1.2);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
+        .logosa.visible {
+            opacity: 1;
         }
-
-        .splash-screen.fade-out {
-            animation: fadeOut 0.5s forwards;
-        }
-
-        @keyframes fadeOut {
-            from {
-                opacity: 1;
-            }
-            to {
-                opacity: 0;
-                visibility: hidden;
-            }
-        }
-
         
     </style>
 </head>
 
 <body>
     <div tabindex="0" id="splash-screen" class="splash-screen" aria-labelled="splash-screen" role="banner">
-        <img role="presentation" class="logos" src="https://4211421036.github.io/g4lihru/987654567.png" alt="Logo" aria-label="logo" aria-labelled="splash-screen">
+        <img role="presentation" class="logos" id="splash-logo" src="https://4211421036.github.io/g4lihru/987654567.png" alt="Logo" aria-label="logo" aria-labelled="splash-screen">
     </div>
     <script>
         // Hide splash screen after 3 seconds
-        const splashScreen = document.getElementById('splash-screen');
-        const logos = document.querySelector('.logos');
-        const logosa = document.querySelector('.logosa');
-            
-            // Start morph animation
-            setTimeout(() => {
-                logos.style.opacity = '0';
-                logosa.style.opacity = '1';
-            }, 1000);
+        window.addEventListener('load', () => {
+            const splashScreen = document.getElementById('splash-screen');
+            const splashLogo = document.getElementById('splash-logo');
+            const headerLogo = document.getElementById('header-logo');
 
-            // Hide splash screen after animation
+            // Mulai transisi
             setTimeout(() => {
-                splashScreen.classList.add('fade-out');
-            }, 2500);
+                // 1. Animasi logo splash ke posisi header
+                splashLogo.classList.add('morph-to-header');
+
+                // 2. Fade out splash screen
+                setTimeout(() => {
+                    splashScreen.style.opacity = '0';
+                }, 400);
+
+                // 3. Tampilkan logo header
+                setTimeout(() => {
+                    headerLogo.classList.add('visible');
+                    // 4. Hapus splash screen
+                    splashScreen.style.display = 'none';
+                }, 800);
+            }, 500);
         });
     </script>
     <div tabindex="0" class="app-container">
         <div role="navigation" class="header">
-            <img role="presentation" class="logosa" src="https://4211421036.github.io/qualityair/image.jpg" alt="Logo Application">
+            <img role="presentation" class="logosa" id="header-logo" src="https://4211421036.github.io/qualityair/image.jpg" alt="Logo Application">
             <div>
                 <div role="text" class="greeting" id="greeting" aria-labelled="greeting" aria-hidden="true">Good Morning</div>
                 <div role="text" class="date" id="current-date" aria-label="Current Date"></div>
