@@ -315,17 +315,20 @@
             z-index: 1000;
         }
         .logos {
-            width: 150px; 
-            height: 150px; 
-            background: white; 
-            border-radius: 25px;
+            width: 150px; /* Ukuran awal logo */
+            height: auto;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .logos.morph-to-header {
-            width: 50px; /* atau sesuaikan dengan ukuran logo di header */
-            top: 20px; /* sesuaikan dengan posisi header */
+            width: 50px; /* Ukuran akhir logo */
+            top: 20px; /* Posisi akhir di header */
             left: 20px;
-            transform: translate(0, 0);
+            transform: translate(0, 0); /* Reset transform karena sudah di posisi absolut */
         }
 
         @media (prefers-color-scheme: dark) {
@@ -418,14 +421,20 @@
             100% { background-position: -100% 0; }
         }
         .logosa {
-            width: 50px; /* sesuaikan ukuran */
+            width: 50px;
             height: auto;
             opacity: 0;
-            transition: opacity 0.3s;
+            transition: opacity 0.3s ease-in;
         }
 
         .logosa.visible {
             opacity: 1;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+            cursor: pointer;
         }
         
     </style>
@@ -442,28 +451,31 @@
             const splashLogo = document.getElementById('splash-logo');
             const headerLogo = document.getElementById('header-logo');
 
-            // Mulai transisi
+            // Beri waktu sebentar agar splash screen terlihat
             setTimeout(() => {
-                // 1. Animasi logo splash ke posisi header
+                // 1. Mulai animasi morph logo
                 splashLogo.classList.add('morph-to-header');
 
-                // 2. Fade out splash screen
+                // 2. Setelah logo mulai bergerak, mulai fade out splash screen
                 setTimeout(() => {
                     splashScreen.style.opacity = '0';
                 }, 400);
 
-                // 3. Tampilkan logo header
+                // 3. Setelah animasi selesai, tampilkan logo header dan hapus splash screen
                 setTimeout(() => {
                     headerLogo.classList.add('visible');
-                    // 4. Hapus splash screen
-                    splashScreen.style.display = 'none';
+                    setTimeout(() => {
+                        splashScreen.style.display = 'none';
+                    }, 100);
                 }, 800);
-            }, 500);
+            }, 1000); // Tunda 1 detik sebelum memulai animasi
         });
     </script>
     <div tabindex="0" class="app-container">
         <div role="navigation" class="header">
-            <img role="presentation" class="logosa" id="header-logo" src="https://4211421036.github.io/qualityair/image.jpg" alt="Logo Application">
+            <a class="linked" aria-label="Pelajaran" href="http://4211421036.github.io/" title="Pelajaran">
+                <img role="presentation" class="logosa" id="header-logo" src="https://4211421036.github.io/qualityair/image.jpg" alt="Logo Application" aria-hidden="true">
+            </a>
             <div>
                 <div role="text" class="greeting" id="greeting" aria-labelled="greeting" aria-hidden="true">Good Morning</div>
                 <div role="text" class="date" id="current-date" aria-label="Current Date"></div>
