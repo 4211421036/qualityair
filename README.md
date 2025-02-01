@@ -4,6 +4,7 @@ This project involves using an **ESP32** microcontroller and **MQ-7 CO sensor** 
 
 ## Features
 - Real-time CO monitoring using the MQ-7 sensor.
+- Widget Application in Android Device
 - Data updates every 5 seconds and pushes the results to a GitHub repository.
 - Data is stored as JSON files within the repository.
 - Time synchronization using NTP for accurate timestamps.
