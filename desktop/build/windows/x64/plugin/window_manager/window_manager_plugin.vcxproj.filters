@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\asus\public\unnes-dart\comonitoring\windows\flutter\ephemeral\.plugin_symlinks\window_manager\windows\window_manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\asus\public\unnes-dart\comonitoring\windows\flutter\ephemeral\.plugin_symlinks\window_manager\windows\window_manager_plugin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\asus\public\unnes-dart\comonitoring\windows\flutter\ephemeral\.plugin_symlinks\window_manager\windows\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{41530FEE-160B-3BCA-A813-655A45CFEB12}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
