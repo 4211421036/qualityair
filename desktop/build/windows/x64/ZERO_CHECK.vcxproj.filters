@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\asus\public\unnes-dart\comonitoring\build\windows\x64\CMakeFiles\0d8cb22335f276f221afa0dd5ab0f615\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{A0E12617-B16B-34AA-B638-B7343F990984}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
